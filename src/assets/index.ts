@@ -7,7 +7,7 @@ export { default as CART_BLACK } from "./icons/cart-black.svg";
 export { default as CART_RED } from "./icons/cart-red.svg";
 export { default as EXCHANGE_BLACK } from "./icons/exchange-black.svg";
 export { default as EXCHANGE_RED } from "./icons/exchange-red.svg";
-export { default as LOGO } from "./images/logo.svg";
+export { default as LOGO } from "./logo.svg";
 export { default as PAYMENT_LINK_BLACK } from "./icons/payment-link-black.svg";
 export { default as PAYMENT_LINK_RED } from "./icons/payment-link-red.svg";
 export { default as PIE_CHART_BLACK } from "./icons/pie-chart-black.svg";
