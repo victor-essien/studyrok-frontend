@@ -2,17 +2,20 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import StudyGoals from './components/StudyGoals';
 import EducationLevel from './components/EducationLevel';
+
 export default function Onboarding() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   // Get current step from URL (default to education_level)
-  const currentStep = searchParams.get('currentStep') || 'education_level';
+  const currentStep = searchParams.get('currentStep') || 'educational_level';
 
   // Function to move to next step
   const nextStep = () => {
-    if (currentStep === 'education_level') {
+  
+     if (currentStep === 'education_level') {
       setSearchParams({ currentStep: 'study_goals' });
-    } else if (currentStep === 'study_goals') {
+    }
+    else if (currentStep === 'study_goals') {
       setSearchParams({ currentStep: 'summary' });
     }
   };
@@ -45,3 +48,12 @@ export default function Onboarding() {
     </div>
   );
 }
+// feat: Add LandingPage component with animated sections, navigation, testimonials, and pricing plans
+
+// feat: Implement modal slice for managing modal states and actions
+
+// feat: Create notification slice for handling notifications and their states
+
+// feat: Develop UI slice for managing theme, sidebar, and mobile menu states
+
+// feat: Establish user slice for user authentication, preferences, and actions

@@ -3,6 +3,7 @@ export type UserTier = 'free' | 'premium' | 'pro';
 
 export interface User {
     id: string;
+    name:string;
     email: string;
     avatar?: string;
     tier: UserTier;

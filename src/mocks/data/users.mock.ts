@@ -1,0 +1,54 @@
+import type { User } from "@/types";
+
+export const mockUsers: User[] = [
+
+    {
+        id: 'user-1',
+         email: 'john.doe@studyrok.com',
+        name: 'John Doe',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=John',
+    tier: 'premium',
+    studyGoal: 60,
+    streak: 15,
+    totalStudyTime: 2340,
+    aiRequestsUsed: 45,
+    aiRequestLimit: 100,
+    stripeId: 'cus_123456789',
+    createdAt: '2024-01-15T08:00:00Z',
+    updatedAt: '2024-03-10T14:30:00Z',
+
+    },
+    {
+    id: 'user-2',
+    email: 'sarah.wilson@studyrok.com',
+    name: 'Sarah Wilson',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah',
+    tier: 'free',
+    studyGoal: 30,
+    streak: 7,
+    totalStudyTime: 890,
+    aiRequestsUsed: 23,
+    aiRequestLimit: 50,
+    createdAt: '2024-02-20T10:00:00Z',
+    updatedAt: '2024-03-10T09:15:00Z',
+  },
+
+  {
+    id: 'user-3',
+    email: 'mike.chen@studyrok.com',
+    name: 'Mike Chen',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Mike',
+    tier: 'pro',
+    studyGoal: 120,
+    streak: 42,
+    totalStudyTime: 5670,
+    aiRequestsUsed: 156,
+    aiRequestLimit: -1, // Unlimited
+    stripeId: 'cus_987654321',
+    createdAt: '2023-11-01T07:00:00Z',
+    updatedAt: '2024-03-10T16:45:00Z',
+  },
+]
+
+
+export const mockCurrentUser = mockUsers[0];

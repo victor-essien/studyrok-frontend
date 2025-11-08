@@ -2,18 +2,31 @@ import axios from 'axios';
 import type  { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import type { ApiError, ApiResponse } from '@/types';
 
+const API_BASE_URL = import.meta.env.DEV 
+  ? 'http://localhost:3001/api'  // JSON Server
+  : import.meta.env.VITE_API_URL; // Production API
+
 class ApiClient {
   private client: AxiosInstance;
   private authToken: string | null = null;
 
+  
+
   constructor() {
-    this.client = axios.create({
-      baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000/api',
-      timeout: 30000,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    // this.client = axios.create({
+    //   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3001/api',
+    //   timeout: 30000,
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    // });
+     this.client = axios.create({
+    baseURL: API_BASE_URL,
+    timeout: 30000,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
 
     this.setupInterceptors();
   }
@@ -128,6 +141,7 @@ class ApiClient {
   // HTTP methods
   async get<T = any>(url: string, config?: AxiosRequestConfig): Promise<T> {
     const response = await this.client.get<ApiResponse<T>>(url, config);
+    console.log('API GET response:', response);
     return response.data.data as T;
   }
 

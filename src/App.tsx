@@ -1,7 +1,7 @@
 import {  Route, Routes } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import WelcomeScreen from "./features/auth/components/Welcome";
-import AuthForm from "./features/auth/components/Authform";
+import AuthForm from "./features/auth/components/AuthForm";
 import Onboarding from "./features/auth/onboarding/Onboarding";
 function App() {
  

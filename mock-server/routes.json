@@ -1,0 +1,11 @@
+{
+  "/api/*": "/$1",
+  "/api/auth/me": "/users/user-1",
+  "/api/boards*": "/studyBoards$1",
+  "/api/boards/:id/flashcards": "/flashcards?studyBoardId=:id",
+  "/api/boards/:id/quizzes": "/quizzes?studyBoardId=:id",
+  "/api/notes/:id/flashcards": "/flashcards?studyNoteId=:id",
+  "/api/flashcards/due-for-review": "/flashcards?_sort=nextReviewDate&_order=asc&_limit=10",
+  "/api/analytics/overview": "/analytics"
+}
+
