@@ -9,15 +9,16 @@ export interface User {
     tier: UserTier;
     studyGoal: number;
     studyObjective?: string;
+    educationLevel?: string;
     totalStudyTime: number;
     streak: number;
     aiRequestsUsed: number;
     aiRequestLimit: number;
     stripeId?: string;
+    onboarded: boolean;
     createdAt: string;
     updatedAt: string;
 }
-
 
 export interface UserStats {
     totalBoards: number;

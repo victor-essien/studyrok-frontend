@@ -3,6 +3,8 @@ import LandingPage from "./pages/LandingPage";
 import WelcomeScreen from "./features/auth/components/Welcome";
 import AuthForm from "./features/auth/components/AuthForm";
 import Onboarding from "./features/auth/onboarding/Onboarding";
+import LoginForm from "./features/auth/components/LoginForm";
+
 function App() {
  
 
@@ -11,8 +13,9 @@ function App() {
    <Routes>
   <Route path="/" element={<LandingPage />} />
   <Route path="/welcome" element={<WelcomeScreen />} />
-  <Route path="/auth" element={<AuthForm />} />
-  <Route path="/onboarding" element={<Onboarding />}/>
+  <Route path="/signup" element={<AuthForm />} />
+  <Route path="/login" element={<LoginForm />} />signup
+  <Route path="/onboarding" element={<Onboarding/>}/>
    </Routes>
     </>
   )

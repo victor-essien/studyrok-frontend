@@ -10,6 +10,7 @@ import {
 
 // import logo from '../logo.svg'
 import logo from '../assets/logo.svg'
+import { Link } from 'react-router-dom';
  
 // Stable AnimatedSection component (moved out of TestPage to avoid remounts)
 const AnimatedSection: React.FC<{ children: any; delay?: number }> = ({ children, delay = 0 }) => {
@@ -273,7 +274,9 @@ const LandingPage = () => {
                 </a>
               ))}
               <button className="px-6 py-2 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition-colors">
+                <Link to="/welcome">
                 Get Started
+                </Link>
               </button>
             </div>
 

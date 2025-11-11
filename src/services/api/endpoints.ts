@@ -4,6 +4,7 @@ export const ENDPOINTS = {
     login: '/auth/login',
     signup: '/auth/signup',
     logout: '/auth/logout',
+    onboarding: '/auth/onboarding',
     refreshToken: '/auth/refresh-token',
     forgotPassword: '/auth/forgot-password',
     resetPassword: '/auth/reset-password',

@@ -1,52 +1,27 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Eye, EyeOff } from "lucide-react";
-import Input from '@/components/ui/Input/Input';
-import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowLeft, } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useLogin } from '../hooks/useAuth';
 
 export default function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState("")
-  const [password, setPassword] = useState("");
-  const [passwordError, setPasswordError] = useState("")
-  const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate()
-
-
-  // === EMAIL VALIDATION ===
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+  const navigate = useNavigate();
+  const { mutate: login, isPending } = useLogin();
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    login(formData);
   };
 
- 
-
- 
-  const handleSubmit = () => {
-     if (!email) {
-      setEmailError("Email is required");
-      return;
-    }
-    if (!validateEmail(email)) {
-      setEmailError("Please enter a valid email address");
-      return;
-    }
-    setEmailError("");
-      if (!password ) {
-      setPasswordError("Please fill in the password field");
-      return;
-    }
-
-    if (password.length < 6) {
-      setPasswordError("Password must be at least 6 characters long");
-      return;
-    }
-
-    
-
-    setPasswordError("");
-    console.log({ email, password });
-    alert("Account created successfully ✅");
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const formVariants = {
@@ -58,18 +33,17 @@ export default function LoginForm() {
   return (
     <div className="relative flex flex-col items-center  min-h-screen px-4 bg-white  transition-colors">
       {/* Back Button (fixed at top-left) */}
-      
-        <button
-          onClick={() => navigate(-1)}
-          className="absolute top-6 text-white left-4 md:left-11 p-2 rounded-full hover:bg-neutral-800 hover:text-gray-100 transition"
-        >
-          <ArrowLeft className="w-5 h-5 text-gray-800 " />
-        </button>
-      
+
+      <button
+        onClick={() => navigate(-1)}
+        className="absolute top-6  left-4 md:left-11  text-gray-800 p-2 rounded-full hover:bg-neutral-800 hover:text-gray-100 transition"
+      >
+        <ArrowLeft className="w-5 h-5 " />
+      </button>
 
       <div className="w-full max-w-sm mt-48">
         <AnimatePresence mode="wait">
-          
+          {/*           
             <motion.div
               key="login"
               variants={formVariants}
@@ -134,8 +108,64 @@ export default function LoginForm() {
                 </a>{" "}
                 of StudyRok
               </p>
-            </motion.div>
-          
+            </motion.div> */}
+          <motion.div
+            key="login"
+            variants={formVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={{ duration: 0.3 }}
+            className="space-y-6"
+          ></motion.div>
+          <h2 className="text-3xl font-bold text-center mb-2">Login</h2>
+          <p className="text-gray-600 text-center mb-6">
+            Continue your studying journey with StudyRok
+          </p>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none"
+                placeholder="you@example.com"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                minLength={6}
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none"
+                placeholder="At least 6 characters"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={isPending}
+              className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-semibold hover:opacity-90 transition disabled:opacity-50"
+            >
+              {isPending ? 'Creating account...' : 'Sign Up'}
+            </button>
+          </form>
+
+          <p className="text-center mt-6 text-gray-600">
+            Don't have an account?{' '}
+            <Link to="/signup" className="text-purple-600 font-semibold hover:underline">
+              Sign In
+            </Link>
+          </p>
         </AnimatePresence>
       </div>
     </div>

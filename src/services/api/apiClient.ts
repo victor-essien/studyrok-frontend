@@ -22,7 +22,7 @@ class ApiClient {
     // });
      this.client = axios.create({
     baseURL: API_BASE_URL,
-    timeout: 30000,
+    // timeout: 10000,
     headers: {
       'Content-Type': 'application/json',
     },
@@ -60,14 +60,23 @@ class ApiClient {
         if (import.meta.env.DEV) {
           console.log(`[API Response] ${response.config.url}`, response.data);
         }
+        console.log('responsefrom interceptor:', response);
 
         return response;
       },
       async (error: AxiosError<ApiError>) => {
+        console.log('error from interceptor:', error);
+         console.error('🔴 API Error:', {
+    url: error.config?.url,
+    method: error.config?.method,
+    status: error.response?.status,
+    message: error.message,
+    code: error.code,
+  });
         // Handle errors
         if (error.response) {
           const { status, data } = error.response;
-
+           
           // Handle 401 Unauthorized
           if (status === 401) {
             this.clearAuthToken();
@@ -146,7 +155,9 @@ class ApiClient {
   }
 
   async post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+    console.log('API POST request to:', url, 'with data:', data);
     const response = await this.client.post<ApiResponse<T>>(url, data, config);
+    console.log('API POST response:', response);
     return response.data.data as T;
   }
 

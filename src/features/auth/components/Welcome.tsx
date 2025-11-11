@@ -52,7 +52,7 @@ const WelcomeScreen: React.FC = () => {
         {/* Continue with Email */}
        
         <button className="w-full rounded-xl bg-gradient-to-b from-purple-500 to-purple-700 py-3 text-white font-semibold shadow-md hover:from-indigo-600 hover:to-indigo-800 transition">
-          <Link to={'/auth'}>
+          <Link to={'/signup'}>
           Continue with Email
 </Link>
         </button>
