@@ -60,7 +60,6 @@ class ApiClient {
         if (import.meta.env.DEV) {
           console.log(`[API Response] ${response.config.url}`, response.data);
         }
-        console.log('responsefrom interceptor:', response);
 
         return response;
       },
@@ -155,7 +154,7 @@ class ApiClient {
   }
 
   async post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
-    console.log('API POST request to:', url, 'with data:', data);
+    console.log(url, data, config);
     const response = await this.client.post<ApiResponse<T>>(url, data, config);
     console.log('API POST response:', response);
     return response.data.data as T;

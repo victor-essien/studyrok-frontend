@@ -6,9 +6,7 @@ import Onboarding from "./features/auth/onboarding/Onboarding";
 import LoginForm from "./features/auth/components/LoginForm";
 
 function App() {
- 
-
-  return (
+   return (
     <>
    <Routes>
   <Route path="/" element={<LandingPage />} />

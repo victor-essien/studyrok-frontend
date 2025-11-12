@@ -3,7 +3,7 @@ import type { User } from "@/types";
 export interface SignupPayload {
   email: string;
   password: string;
-  name?: string;
+  name: string;
 }
 
 export interface LoginPayload {

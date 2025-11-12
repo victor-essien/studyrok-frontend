@@ -63,7 +63,8 @@ export const useCompleteOnboarding = () => {
   return useMutation({
     mutationFn: (payload: OnboardingPayload) => 
       authService.completeOnboarding(payload),
-    onSuccess: (data) => {
+  onSuccess: (data) => {
+  
       updateUser(data.user);
       toast.success('Onboarding completed! Let\'s start learning!');
       navigate('/dashboard');

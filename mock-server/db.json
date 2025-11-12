@@ -14,6 +14,23 @@
       "stripeId": "cus_123456789",
       "createdAt": "2024-01-15T08:00:00Z",
       "updatedAt": "2024-03-10T14:30:00Z"
+    },
+    {
+      "id": "user-1762905291790",
+      "email": "victorzero@gmail.com",
+      "name": "Victor Zero",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Victor Zero",
+      "tier": "free",
+      "studyGoal": 30,
+      "streak": 0,
+      "totalStudyTime": 0,
+      "aiRequestsUsed": 0,
+      "aiRequestLimit": 50,
+      "onboarded": true,
+      "createdAt": "2025-11-11T23:54:51.790Z",
+      "updatedAt": "2025-11-11T23:54:55.971Z",
+      "studyObjective": "Stay consistent with studying",
+      "educationLevel": "college"
     }
   ],
   "boards": [

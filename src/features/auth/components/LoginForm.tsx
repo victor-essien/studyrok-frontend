@@ -36,7 +36,7 @@ export default function LoginForm() {
 
       <button
         onClick={() => navigate(-1)}
-        className="absolute top-6  left-4 md:left-11  text-gray-800 p-2 rounded-full hover:bg-neutral-800 hover:text-gray-100 transition"
+        className="absolute top-9  left-4 md:left-11  text-gray-800 p-2 rounded-full hover:bg-neutral-800 hover:text-gray-100 transition"
       >
         <ArrowLeft className="w-5 h-5 " />
       </button>
@@ -163,7 +163,7 @@ export default function LoginForm() {
           <p className="text-center mt-6 text-gray-600">
             Don't have an account?{' '}
             <Link to="/signup" className="text-purple-600 font-semibold hover:underline">
-              Sign In
+              Sign Up
             </Link>
           </p>
         </AnimatePresence>

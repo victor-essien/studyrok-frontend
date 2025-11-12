@@ -150,7 +150,7 @@ server.post('/api/auth/login', (req, res) => {
 // COMPLETE ONBOARDING
 server.post('/api/auth/onboarding', (req, res) => {
   const { userId, studyObjective, educationLevel } = req.body;
-
+ console.log('Onboarding request body:', req.body);
   if (!userId) {
     return res.status(400).json({
       success: false,
@@ -172,7 +172,7 @@ server.post('/api/auth/onboarding', (req, res) => {
   // Update user with onboarding data
   db.users[userIndex] = {
     ...db.users[userIndex],
-    studyObjective: studyObjective || '',
+    studyObjective: studyObjective,
     educationLevel: educationLevel || '',
     onboarded: true,
     updatedAt: new Date().toISOString(),

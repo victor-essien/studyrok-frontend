@@ -31,6 +31,7 @@ export const authService = {
         return response;
     },
       async completeOnboarding(payload: OnboardingPayload): Promise<{ user: User }> {
+        console.log('Payload in authService:', payload);
     return apiClient.post('/auth/onboarding', payload);
   },
 

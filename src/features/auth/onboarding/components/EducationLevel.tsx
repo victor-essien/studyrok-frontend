@@ -2,13 +2,8 @@ import { useState } from 'react';
 import { Building2, GraduationCap, School } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
-interface Props {
-  onNext?: () => void;
-  onBack?: () => void;
-  onDataChange?: (key: string, value: any) => void;
-}
 
-export default function EducationLevel({ onNext, onDataChange }: Props) {
+export default function EducationLevel({ onNext }: { onNext: (value: string) => void }) {
   const [selected, setSelected] = useState<string | null>(null);
 
   const educationLevels = [
@@ -17,14 +12,9 @@ export default function EducationLevel({ onNext, onDataChange }: Props) {
     { id: 'grad_school', label: 'Grad School', icon: <GraduationCap className="w-5 h-5" /> },
   ];
 
-  const handleSelected = (levelId: string) => {
-    // set selected level and trigger the next step if a callback was provided
+  const handleSelect = (levelId: string) => {
     setSelected(levelId);
-    const selectedLevel = educationLevels.find(level => level.id === levelId);
-    if (onDataChange && selectedLevel) {
-      onDataChange("educationLevel", selectedLevel.label);
-    }
-    if (onNext) onNext();
+    onNext(levelId); // ✅ pass directly to parent
   };
 
   // Animation variants
@@ -62,7 +52,7 @@ export default function EducationLevel({ onNext, onDataChange }: Props) {
               {educationLevels.map((level) => (
                 <button
                   key={level.id}
-                  onClick={() => handleSelected(level.id)}
+                  onClick={() => handleSelect(level.id)}
                   className={`flex items-center gap-3 border rounded-lg px-4 md:px-20 py-4 w-full transition-colors ${
                     selected === level.id
                       ? 'border-blue-600 bg-blue-50 text-blue-700'
