@@ -8,6 +8,7 @@ export interface UIState {
   sidebarCollapsed: boolean;
   mobileMenuOpen: boolean;
   isFullscreen: boolean;
+  showThemeModal: boolean;
 }
 
 export interface UIActions {
@@ -15,6 +16,7 @@ export interface UIActions {
   toggleTheme: () => void;
   toggleSidebar: () => void;
   setSidebarOpen: (open: boolean) => void;
+  setShowThemeModal: (show: boolean) => void;
   toggleSidebarCollapsed: () => void;
   setMobileMenuOpen: (open: boolean) => void;
   toggleMobileMenu: () => void;
@@ -30,30 +32,32 @@ const initialState: UIState = {
   sidebarCollapsed: false,
   mobileMenuOpen: false,
   isFullscreen: false,
+  showThemeModal: false,
 };
 
-export const createUISlice: StateCreator<UISlice> = (set, get) => ({
+const applyTheme = (theme: Theme) => {
+  if (theme === 'dark') {
+    document.documentElement.classList.add('dark');
+  } else if (theme === 'light') {
+    document.documentElement.classList.remove('dark');
+  } else {
+    // System preference
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.classList.toggle('dark', prefersDark);
+  }
+};
+
+export const createUISlice: StateCreator<UISlice, [['zustand/devtools', never]]> = (set, get) => ({
   ...initialState,
 
   setTheme: (theme) => {
     set({ theme }, false, 'ui/setTheme');
-    
-    // Apply theme to document
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else if (theme === 'light') {
-      document.documentElement.classList.remove('dark');
-    } else {
-      // System preference
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      document.documentElement.classList.toggle('dark', prefersDark);
-    }
+    applyTheme(theme);
   },
 
   toggleTheme: () => {
-    const currentTheme = get().theme;
-    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-    get().setTheme(newTheme);
+    // Open theme modal instead of directly toggling
+    set({ showThemeModal: true }, false, 'ui/toggleTheme');
   },
 
   toggleSidebar: () => {
@@ -77,31 +81,29 @@ export const createUISlice: StateCreator<UISlice> = (set, get) => ({
   },
 
   toggleMobileMenu: () => {
-    set(
-      (state) => ({ mobileMenuOpen: !state.mobileMenuOpen }),
-      false,
-      'ui/toggleMobileMenu'
-    );
+    set((state) => ({ mobileMenuOpen: !state.mobileMenuOpen }), false, 'ui/toggleMobileMenu');
   },
 
   toggleFullscreen: () => {
     set(
       (state) => {
         const newFullscreen = !state.isFullscreen;
-        
+
         if (newFullscreen) {
           document.documentElement.requestFullscreen?.();
         } else {
           document.exitFullscreen?.();
         }
-        
+
         return { isFullscreen: newFullscreen };
       },
       false,
       'ui/toggleFullscreen'
     );
   },
-
+  setShowThemeModal: (show) => {
+    set({ showThemeModal: show }, false, 'ui/setShowThemeModal');
+  },
   resetUI: () => {
     set(initialState, false, 'ui/reset');
   },

@@ -15,26 +15,24 @@ const Card: React.FC<CardProps> & {
   ...props
 }) => {
   const baseStyles = 'rounded-2xl transition-all duration-200';
-  
+
   const variantStyles = {
     default: 'bg-white',
     outlined: 'bg-white border-2 border-gray-200',
-    elevated: 'bg-white shadow-lg'
+    elevated: 'bg-white shadow-lg',
   };
-  
+
   const paddingStyles = {
     none: '',
     sm: 'p-4',
     md: 'p-6',
-    lg: 'p-8'
+    lg: 'p-8',
   };
-  
-  const hoverStyles = hoverable
-    ? 'hover:shadow-xl hover:-translate-y-1 cursor-pointer'
-    : '';
-  
+
+  const hoverStyles = hoverable ? 'hover:shadow-xl hover:-translate-y-1 cursor-pointer' : '';
+
   const clickStyles = onClick ? 'cursor-pointer' : '';
-  
+
   return (
     <div
       className={`${baseStyles} ${variantStyles[variant]} ${paddingStyles[padding]} ${hoverStyles} ${clickStyles} ${className}`}

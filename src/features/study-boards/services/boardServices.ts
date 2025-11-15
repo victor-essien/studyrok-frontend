@@ -1,16 +1,15 @@
-import apiClient from "@/services/api/apiClient";
-import { ENDPOINTS } from "@/services/api/endpoints";
-import type { StudyBoard, CreateBoardPayload, BoardProgress, PaginatedResponse } from "@/types";
-
+import apiClient from '@/services/api/apiClient';
+import { ENDPOINTS } from '@/services/api/endpoints';
+import type { StudyBoard, CreateBoardPayload, BoardProgress, PaginatedResponse } from '@/types';
 
 export const boardService = {
- // Get all boards
-    async getBoards(page = 1, limit = 10): Promise<PaginatedResponse<StudyBoard>>{
-        return apiClient.get(ENDPOINTS.boards.list, {
-            params: {page, limit}
-        })
-    },
-    // Get board by ID
+  // Get all boards
+  async getBoards(page = 1, limit = 10): Promise<PaginatedResponse<StudyBoard>> {
+    return apiClient.get(ENDPOINTS.boards.list, {
+      params: { page, limit },
+    });
+  },
+  // Get board by ID
   async getBoardById(id: string): Promise<StudyBoard> {
     return apiClient.get(ENDPOINTS.boards.detail(id));
   },
@@ -29,7 +28,7 @@ export const boardService = {
     formData.append('topic', payload.topic);
     if (payload.title) formData.append('title', payload.title);
     if (payload.description) formData.append('description', payload.description);
-    
+
     payload.files?.forEach((file) => {
       formData.append('files', file);
     });
@@ -61,5 +60,4 @@ export const boardService = {
   async getPublicBoards(): Promise<StudyBoard[]> {
     return apiClient.get(ENDPOINTS.boards.public);
   },
-
-}
+};

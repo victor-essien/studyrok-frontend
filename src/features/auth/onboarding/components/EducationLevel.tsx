@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Building2, GraduationCap, School } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
-
 export default function EducationLevel({ onNext }: { onNext: (value: string) => void }) {
   const [selected, setSelected] = useState<string | null>(null);
 
@@ -26,8 +25,6 @@ export default function EducationLevel({ onNext }: { onNext: (value: string) => 
 
   return (
     <div className="min-h-screen flex flex-col  items-center px-4 md:px-0 relative">
-      
-
       {/* Question */}
       <AnimatePresence mode="wait">
         <motion.div

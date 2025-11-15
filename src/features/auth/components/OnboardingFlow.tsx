@@ -16,7 +16,7 @@
 
 //   const handleSubmit = () => {
 //     if (!user) return;
-    
+
 //     completeOnboarding({
 //       userId: user.id,
 //       ...formData,
@@ -24,7 +24,7 @@
 //   };
 
 //   const interestOptions = [
-//     'Mathematics', 'Science', 'History', 'Literature', 
+//     'Mathematics', 'Science', 'History', 'Literature',
 //     'Languages', 'Arts', 'Technology', 'Business'
 //   ];
 

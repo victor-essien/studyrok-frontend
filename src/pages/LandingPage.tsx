@@ -1,17 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
-import { 
-  Brain, Zap, BookOpen, Target, Sparkles, FileUp, 
-  CheckCircle2, ArrowRight, Play, Users, Clock, 
-  TrendingUp, Star, Award,  Menu, X,
-   FileText, Video, Rocket
+import {
+  Brain,
+  Zap,
+  BookOpen,
+  Target,
+  Sparkles,
+  FileUp,
+  CheckCircle2,
+  ArrowRight,
+  Play,
+  Users,
+  Clock,
+  TrendingUp,
+  Star,
+  Award,
+  Menu,
+  X,
+  FileText,
+  Video,
+  Rocket,
 } from 'lucide-react';
-
-
-// import logo from '../logo.svg'
-import logo from '../assets/logo.svg'
+import { LOGO } from '@/assets';
 import { Link } from 'react-router-dom';
- 
+
 // Stable AnimatedSection component (moved out of TestPage to avoid remounts)
 const AnimatedSection: React.FC<{ children: any; delay?: number }> = ({ children, delay = 0 }) => {
   const ref = React.useRef(null);
@@ -41,7 +53,7 @@ const LandingPage = () => {
     { name: 'Features', href: '#features' },
     { name: 'How it Works', href: '#how-it-works' },
     { name: 'Pricing', href: '#pricing' },
-    { name: 'Testimonials', href: '#testimonials' }
+    { name: 'Testimonials', href: '#testimonials' },
   ];
 
   // Stats
@@ -49,7 +61,7 @@ const LandingPage = () => {
     { value: '50K+', label: 'Active Students', icon: Users },
     { value: '1M+', label: 'Study Hours', icon: Clock },
     { value: '98%', label: 'Success Rate', icon: TrendingUp },
-    { value: '4.9/5', label: 'User Rating', icon: Star }
+    { value: '4.9/5', label: 'User Rating', icon: Star },
   ];
 
   // Features
@@ -57,51 +69,57 @@ const LandingPage = () => {
     {
       icon: Brain,
       title: 'AI-Powered Notes',
-      description: 'Upload your materials or enter a topic, and watch AI generate comprehensive, structured notes in seconds.',
+      description:
+        'Upload your materials or enter a topic, and watch AI generate comprehensive, structured notes in seconds.',
       color: 'text-purple-600',
       bgColor: 'bg-purple-50',
-      benefits: ['Instant generation', 'Well-structured', 'Key concepts highlighted']
+      benefits: ['Instant generation', 'Well-structured', 'Key concepts highlighted'],
     },
     {
       icon: Sparkles,
       title: 'Smart Flashcards',
-      description: 'Auto-generate flashcards from your notes with spaced repetition algorithms for optimal retention.',
+      description:
+        'Auto-generate flashcards from your notes with spaced repetition algorithms for optimal retention.',
       color: 'text-blue-600',
       bgColor: 'bg-blue-50',
-      benefits: ['Spaced repetition', 'Auto-generated', 'Mastery tracking']
+      benefits: ['Spaced repetition', 'Auto-generated', 'Mastery tracking'],
     },
     {
       icon: FileText,
       title: 'Interactive Quizzes',
-      description: 'Test your knowledge with AI-generated quizzes tailored to your study materials.',
+      description:
+        'Test your knowledge with AI-generated quizzes tailored to your study materials.',
       color: 'text-green-600',
       bgColor: 'bg-green-50',
-      benefits: ['Multiple formats', 'Instant feedback', 'Performance analytics']
+      benefits: ['Multiple formats', 'Instant feedback', 'Performance analytics'],
     },
     {
       icon: Video,
       title: 'Video Explainers',
-      description: 'Get engaging video scripts that break down complex topics into digestible content.',
+      description:
+        'Get engaging video scripts that break down complex topics into digestible content.',
       color: 'text-orange-600',
       bgColor: 'bg-orange-50',
-      benefits: ['Visual learning', 'Step-by-step', 'Engaging format']
+      benefits: ['Visual learning', 'Step-by-step', 'Engaging format'],
     },
     {
       icon: Target,
       title: 'Study Boards',
-      description: 'Organize everything in one place. Each topic gets its own board with notes, cards, and quizzes.',
+      description:
+        'Organize everything in one place. Each topic gets its own board with notes, cards, and quizzes.',
       color: 'text-pink-600',
       bgColor: 'bg-pink-50',
-      benefits: ['Organized learning', 'Progress tracking', 'All-in-one hub']
+      benefits: ['Organized learning', 'Progress tracking', 'All-in-one hub'],
     },
     {
       icon: TrendingUp,
       title: 'Progress Analytics',
-      description: 'Track your learning journey with detailed insights and AI-powered recommendations.',
+      description:
+        'Track your learning journey with detailed insights and AI-powered recommendations.',
       color: 'text-indigo-600',
       bgColor: 'bg-indigo-50',
-      benefits: ['Visual insights', 'AI recommendations', 'Goal tracking']
-    }
+      benefits: ['Visual insights', 'AI recommendations', 'Goal tracking'],
+    },
   ];
 
   // How it works
@@ -111,29 +129,29 @@ const LandingPage = () => {
       title: 'Upload or Enter Topic',
       description: 'Drop your PDFs, documents, or simply type what you want to learn.',
       icon: FileUp,
-      color: 'purple'
+      color: 'purple',
     },
     {
       number: '02',
       title: 'AI Processes Content',
       description: 'Our AI analyzes and structures the material into digestible segments.',
       icon: Brain,
-      color: 'blue'
+      color: 'blue',
     },
     {
       number: '03',
       title: 'Get Study Materials',
       description: 'Receive notes, flashcards, quizzes, and more - all in one study board.',
       icon: BookOpen,
-      color: 'green'
+      color: 'green',
     },
     {
       number: '04',
       title: 'Learn & Master',
       description: 'Study at your pace, track progress, and ace your exams.',
       icon: Award,
-      color: 'orange'
-    }
+      color: 'orange',
+    },
   ];
 
   // Testimonials
@@ -142,30 +160,34 @@ const LandingPage = () => {
       name: 'Sarah Johnson',
       role: 'Medical Student',
       image: '👩‍⚕️',
-      content: 'StudyRok transformed how I study for med school. The AI-generated notes save me hours, and the flashcards with spaced repetition helped me ace my anatomy exam!',
-      rating: 5
+      content:
+        'StudyRok transformed how I study for med school. The AI-generated notes save me hours, and the flashcards with spaced repetition helped me ace my anatomy exam!',
+      rating: 5,
     },
     {
       name: 'Marcus Chen',
       role: 'Computer Science Major',
       image: '👨‍💻',
-      content: 'As a CS student, I have tons of lecture slides. StudyRok turns them into organized study materials instantly. The quiz feature is perfect for exam prep.',
-      rating: 5
+      content:
+        'As a CS student, I have tons of lecture slides. StudyRok turns them into organized study materials instantly. The quiz feature is perfect for exam prep.',
+      rating: 5,
     },
     {
       name: 'Emily Rodriguez',
       role: 'High School Senior',
       image: '👩‍🎓',
-      content: "I'm preparing for college entrance exams, and StudyRok makes it so much easier. The study boards keep everything organized, and I love the progress tracking!",
-      rating: 5
+      content:
+        "I'm preparing for college entrance exams, and StudyRok makes it so much easier. The study boards keep everything organized, and I love the progress tracking!",
+      rating: 5,
     },
     {
       name: 'David Park',
       role: 'Graduate Student',
       image: '👨‍🔬',
-      content: 'The AI video explainer scripts are genius! I can finally understand complex research papers. This tool is a game-changer for grad school.',
-      rating: 5
-    }
+      content:
+        'The AI video explainer scripts are genius! I can finally understand complex research papers. This tool is a game-changer for grad school.',
+      rating: 5,
+    },
   ];
 
   // Pricing
@@ -180,10 +202,10 @@ const LandingPage = () => {
         'Basic AI notes generation',
         '50 flashcards',
         '10 quizzes',
-        'Community support'
+        'Community support',
       ],
       cta: 'Start Free',
-      popular: false
+      popular: false,
     },
     {
       name: 'Premium',
@@ -197,10 +219,10 @@ const LandingPage = () => {
         '100 quizzes',
         'Video explainer scripts',
         'Priority support',
-        'Progress analytics'
+        'Progress analytics',
       ],
       cta: 'Start Premium',
-      popular: true
+      popular: true,
     },
     {
       name: 'Pro',
@@ -215,20 +237,20 @@ const LandingPage = () => {
         'Advanced analytics',
         'Custom AI models',
         '24/7 priority support',
-        'Early access to features'
+        'Early access to features',
       ],
       cta: 'Go Pro',
-      popular: false
-    }
+      popular: false,
+    },
   ];
   const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 50 },
-  whileInView: { opacity: 1, y: 0 },
-  transition: { duration: 0.6, delay },
-  viewport: { once: true, amount: 0.2 },
-});
+    initial: { opacity: 0, y: 50 },
+    whileInView: { opacity: 1, y: 0 },
+    transition: { duration: 0.6, delay },
+    viewport: { once: true, amount: 0.2 },
+  });
 
-  const AnimatedSection = ({ children, delay = 0 } : any): any => {
+  const AnimatedSection = ({ children, delay = 0 }: any): any => {
     const ref = React.useRef(null);
     const isInView = useInView(ref, { once: true, margin: '-100px' });
 
@@ -237,7 +259,7 @@ const LandingPage = () => {
         ref={ref}
         initial={{ opacity: 0, y: 50 }}
         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-        transition={ isInView ?{ duration: 0 }: {duration:0.6, delay}}
+        transition={isInView ? { duration: 0 } : { duration: 0.6, delay }}
       >
         {children}
       </motion.div>
@@ -274,18 +296,17 @@ const LandingPage = () => {
                 </a>
               ))}
               <button className="px-6 py-2 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition-colors">
-                <Link to="/welcome">
-                Get Started
-                </Link>
+                <Link to="/welcome">Get Started</Link>
               </button>
             </div>
 
             {/* Mobile Menu Button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden"
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6 text-black" /> : <Menu className="w-6 h-6 text-black" />}
+            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden">
+              {mobileMenuOpen ? (
+                <X className="w-6 h-6 text-black" />
+              ) : (
+                <Menu className="w-6 h-6 text-black" />
+              )}
             </button>
           </div>
         </div>
@@ -326,10 +347,7 @@ const LandingPage = () => {
         </div>
 
         <div className="max-w-7xl mx-auto">
-          <motion.div
-            style={{ opacity, scale }}
-            className="text-center mb-16"
-          >
+          <motion.div style={{ opacity, scale }} className="text-center mb-16">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -357,8 +375,8 @@ const LandingPage = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-xl md:text-2xl text-gray-600 mb-10 max-w-3xl mx-auto"
             >
-              Transform any topic or document into comprehensive study materials with AI. 
-              Notes, flashcards, quizzes, and more - all in seconds.
+              Transform any topic or document into comprehensive study materials with AI. Notes,
+              flashcards, quizzes, and more - all in seconds.
             </motion.p>
 
             <motion.div
@@ -440,13 +458,13 @@ const LandingPage = () => {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
-                <motion.div {...fadeUp(0)}>
+              <motion.div {...fadeUp(0)}>
                 <div className="text-center">
                   <stat.icon className="w-8 h-8 mx-auto mb-3 text-purple-600" />
                   <div className="text-4xl font-bold text-gray-900 mb-2">{stat.value}</div>
                   <div className="text-gray-600 font-medium">{stat.label}</div>
                 </div>
-            </motion.div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -455,26 +473,28 @@ const LandingPage = () => {
       {/* Features Section */}
       <section id="features" className="py-20 px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-           <motion.div {...fadeUp(0)}>
+          <motion.div {...fadeUp(0)}>
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
                 Everything You Need to Ace Your Exams
               </h2>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                One platform, unlimited learning possibilities. From notes to quizzes, we've got you covered.
+                One platform, unlimited learning possibilities. From notes to quizzes, we've got you
+                covered.
               </p>
             </div>
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
-                 <motion.div {...fadeUp(index * 0.1)}>
-
+              <motion.div {...fadeUp(index * 0.1)}>
                 <motion.div
                   whileHover={{ y: -8 }}
                   className="bg-white rounded-2xl p-8 border border-gray-200 hover:border-purple-200 hover:shadow-xl transition-all cursor-pointer h-full"
                 >
-                  <div className={`w-14 h-14 ${feature.bgColor} rounded-xl flex items-center justify-center mb-6`}>
+                  <div
+                    className={`w-14 h-14 ${feature.bgColor} rounded-xl flex items-center justify-center mb-6`}
+                  >
                     <feature.icon className={`w-7 h-7 ${feature.color}`} />
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-3">{feature.title}</h3>
@@ -497,21 +517,18 @@ const LandingPage = () => {
       {/* How it Works */}
       <section id="how-it-works" className="py-20 px-6 lg:px-8 bg-gray-50">
         <div className="max-w-7xl mx-auto">
-           <motion.div {...fadeUp(0)}>
+          <motion.div {...fadeUp(0)}>
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
                 Your Journey to Better Grades
               </h2>
-              <p className="text-xl text-gray-600">
-                Four simple steps to transform how you study
-              </p>
+              <p className="text-xl text-gray-600">Four simple steps to transform how you study</p>
             </div>
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {steps.map((step, index) => (
-                 <motion.div {...fadeUp(index * 0.15)}>
-              
+              <motion.div {...fadeUp(index * 0.15)}>
                 <div className="relative">
                   {index < steps.length - 1 && (
                     <div className="hidden lg:block absolute top-16 left-full w-full h-0.5 bg-gray-200 -z-10">
@@ -525,7 +542,9 @@ const LandingPage = () => {
                   )}
                   <div className="bg-white rounded-2xl p-8 border-2 border-gray-200 hover:border-purple-300 transition-all">
                     <div className="text-6xl font-bold text-gray-100 mb-4">{step.number}</div>
-                    <div className={`w-12 h-12 bg-${step.color}-100 rounded-xl flex items-center justify-center mb-4`}>
+                    <div
+                      className={`w-12 h-12 bg-${step.color}-100 rounded-xl flex items-center justify-center mb-4`}
+                    >
                       <step.icon className={`w-6 h-6 text-${step.color}-600`} />
                     </div>
                     <h3 className="text-xl font-bold text-gray-900 mb-3">{step.title}</h3>
@@ -541,14 +560,12 @@ const LandingPage = () => {
       {/* Social Proof / Testimonials */}
       <section id="testimonials" className="py-20 px-6 lg:px-8 overflow-hidden">
         <div className="max-w-7xl mx-auto">
-           <motion.div {...fadeUp(0)}>
+          <motion.div {...fadeUp(0)}>
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
                 Loved by Students Worldwide
               </h2>
-              <p className="text-xl text-gray-600">
-                Join  students who are studying smarter
-              </p>
+              <p className="text-xl text-gray-600">Join students who are studying smarter</p>
             </div>
           </motion.div>
 
@@ -573,7 +590,9 @@ const LandingPage = () => {
                     "{testimonials[activeTestimonial].content}"
                   </p>
                   <div>
-                    <div className="font-bold text-gray-900">{testimonials[activeTestimonial].name}</div>
+                    <div className="font-bold text-gray-900">
+                      {testimonials[activeTestimonial].name}
+                    </div>
                     <div className="text-gray-600">{testimonials[activeTestimonial].role}</div>
                   </div>
                 </div>
@@ -599,21 +618,18 @@ const LandingPage = () => {
       {/* Pricing Section */}
       <section id="pricing" className="py-20 px-6 lg:px-8 bg-gray-50">
         <div className="max-w-7xl mx-auto">
-           <motion.div {...fadeUp(0)}>
+          <motion.div {...fadeUp(0)}>
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
                 Choose Your Learning Plan
               </h2>
-              <p className="text-xl text-gray-600">
-                Start free, upgrade anytime. No hidden fees.
-              </p>
+              <p className="text-xl text-gray-600">Start free, upgrade anytime. No hidden fees.</p>
             </div>
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-8">
             {pricingPlans.map((plan, index) => (
-                 <motion.div {...fadeUp(index *0.1)}>
-             
+              <motion.div {...fadeUp(index * 0.1)}>
                 <motion.div
                   whileHover={{ y: -8 }}
                   className={`relative bg-white rounded-2xl p-8 border-2 transition-all ${
@@ -665,7 +681,7 @@ const LandingPage = () => {
           <AnimatedSection delay={0.3}>
             <div className="mt-12 text-center">
               <p className="text-gray-600">
-                All plans include 14-day money-back guarantee. 
+                All plans include 14-day money-back guarantee.
                 <a href="#" className="text-purple-600 font-semibold hover:underline ml-1">
                   View full comparison
                 </a>
@@ -696,7 +712,7 @@ const LandingPage = () => {
               Ready to Transform Your Study Game?
             </h2>
             <p className="text-xl text-purple-500 mb-10">
-              Join  students who are already studying smarter with StudyRok
+              Join students who are already studying smarter with StudyRok
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <button className="group px-8 py-4 bg-white text-purple-600 rounded-xl font-bold text-lg hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl flex items-center gap-2">
@@ -717,22 +733,29 @@ const LandingPage = () => {
           <div className="grid md:grid-cols-4 gap-12 mb-12">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <img src={logo} alt="Logo" className="h-10 w-auto" />
+                <img src={LOGO} alt="Logo" className="h-10 w-auto" />
                 <span className="text-2xl font-bold">StudyRok</span>
               </div>
-              <p className="text-gray-400 mb-6">
-               Study companion for better grades.
-              </p>
+              <p className="text-gray-400 mb-6">Study companion for better grades.</p>
               <div className="flex gap-4">
-                <a href="#" className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-purple-600 transition-colors">
+                <a
+                  href="#"
+                  className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-purple-600 transition-colors"
+                >
                   <span className="sr-only">Twitter</span>
                   𝕏
                 </a>
-                <a href="#" className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-purple-600 transition-colors">
+                <a
+                  href="#"
+                  className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-purple-600 transition-colors"
+                >
                   <span className="sr-only">LinkedIn</span>
                   in
                 </a>
-                <a href="#" className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-purple-600 transition-colors">
+                <a
+                  href="#"
+                  className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-purple-600 transition-colors"
+                >
                   <span className="sr-only">Instagram</span>
                   📷
                 </a>
@@ -742,42 +765,94 @@ const LandingPage = () => {
             <div>
               <h3 className="font-bold mb-4">Product</h3>
               <ul className="space-y-3 text-gray-400">
-                <li><a href="#features" className="hover:text-white transition-colors">Features</a></li>
-                <li><a href="#pricing" className="hover:text-white transition-colors">Pricing</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Roadmap</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Changelog</a></li>
+                <li>
+                  <a href="#features" className="hover:text-white transition-colors">
+                    Features
+                  </a>
+                </li>
+                <li>
+                  <a href="#pricing" className="hover:text-white transition-colors">
+                    Pricing
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors">
+                    Roadmap
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors">
+                    Changelog
+                  </a>
+                </li>
               </ul>
             </div>
 
             <div>
               <h3 className="font-bold mb-4">Company</h3>
               <ul className="space-y-3 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">About</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Careers</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors">
+                    About
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors">
+                    Blog
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors">
+                    Careers
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors">
+                    Contact
+                  </a>
+                </li>
               </ul>
             </div>
 
             <div>
               <h3 className="font-bold mb-4">Legal</h3>
               <ul className="space-y-3 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Cookie Policy</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">GDPR</a></li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors">
+                    Privacy Policy
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors">
+                    Terms of Service
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors">
+                    Cookie Policy
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition-colors">
+                    GDPR
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
 
           <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-gray-400 text-sm">
-              © 2025 StudyRok. All rights reserved.
-            </p>
+            <p className="text-gray-400 text-sm">© 2025 StudyRok. All rights reserved.</p>
             <div className="flex items-center gap-6 text-sm text-gray-400">
-              <a href="#" className="hover:text-white transition-colors">Status</a>
-              <a href="#" className="hover:text-white transition-colors">Documentation</a>
-              <a href="#" className="hover:text-white transition-colors">Support</a>
+              <a href="#" className="hover:text-white transition-colors">
+                Status
+              </a>
+              <a href="#" className="hover:text-white transition-colors">
+                Documentation
+              </a>
+              <a href="#" className="hover:text-white transition-colors">
+                Support
+              </a>
             </div>
           </div>
         </div>

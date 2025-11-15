@@ -2,7 +2,6 @@ export type CardDifficulty = 'easy' | 'medium' | 'hard';
 export type CardType = 'basic' | 'cloze' | 'image';
 export type ReviewRating = 0 | 1 | 2 | 3; // Again, Hard, Good, Easy
 
-
 export interface Flashcard {
   id: string;
   studyBoardId: string;
@@ -22,7 +21,6 @@ export interface Flashcard {
   lastReviewedAt?: string;
 }
 
-
 export interface FlashcardDeck {
   id: string;
   studyBoardId: string;
@@ -32,13 +30,11 @@ export interface FlashcardDeck {
   masteredCount: number;
 }
 
-
 export interface GenerateFlashcardsPayload {
   studyNoteId: string;
   count?: number;
   difficulty?: 'mixed' | CardDifficulty;
 }
-
 
 export interface ReviewFlashcardPayload {
   flashcardId: string;

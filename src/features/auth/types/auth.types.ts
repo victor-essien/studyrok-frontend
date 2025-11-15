@@ -1,4 +1,4 @@
-import type { User } from "@/types";
+import type { User } from '@/types';
 // Auth types
 export interface SignupPayload {
   email: string;
@@ -14,8 +14,7 @@ export interface LoginPayload {
 export interface OnboardingPayload {
   userId: string;
   studyObjective?: string;
-  educationLevel?: string; 
-
+  educationLevel?: string;
 }
 
 export interface AuthResponse {

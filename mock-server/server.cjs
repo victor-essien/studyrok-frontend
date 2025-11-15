@@ -1,33 +1,36 @@
 // mock-server/server.cjs
 const jsonServer = require('json-server');
 const path = require('path');
-const fs = require('fs')
+const fs = require('fs');
 
 const server = jsonServer.create();
-const router = jsonServer.router(path.join(__dirname, 'db.json'))
+const router = jsonServer.router(path.join(__dirname, 'db.json'));
 const middlewares = jsonServer.defaults();
 
 //Helper to read/write db.json
 const dbPath = path.join(__dirname, 'db.json');
 const getDb = () => JSON.parse(fs.readFileSync(dbPath, 'utf-8'));
-const saveDb = (data) =>  fs.writeFileSync(dbPath, JSON.stringify(data, null, 2));
+const saveDb = (data) => fs.writeFileSync(dbPath, JSON.stringify(data, null, 2));
 
 // Custom middleware for CORS and delay
 
 server.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization')
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+  );
 
-    if (req.method === 'OPTIONS') {
+  if (req.method === 'OPTIONS') {
     return res.sendStatus(200);
   }
 
-//   setTimeout(() => {
-//     next();
-//   }, 500);
-next();
-})
+  //   setTimeout(() => {
+  //     next();
+  //   }, 500);
+  next();
+});
 
 server.use(jsonServer.bodyParser);
 
@@ -35,9 +38,9 @@ server.use(jsonServer.bodyParser);
 
 //SIGNUP
 server.post('/api/auth/signup', (req, res) => {
-    const {email, password, name} = req.body;
- console.log('Signup request body:', req.body);
-// Validation
+  const { email, password, name } = req.body;
+  console.log('Signup request body:', req.body);
+  // Validation
   if (!email || !password || !name) {
     return res.status(400).json({
       success: false,
@@ -63,8 +66,8 @@ server.post('/api/auth/signup', (req, res) => {
   }
 
   const db = getDb();
-  
-   const existingUser = db.users.find((u) => u.email === email);
+
+  const existingUser = db.users.find((u) => u.email === email);
   if (existingUser) {
     return res.status(409).json({
       success: false,
@@ -72,7 +75,7 @@ server.post('/api/auth/signup', (req, res) => {
     });
   }
 
-   // Create new user
+  // Create new user
   const newUser = {
     id: `user-${Date.now()}`,
     email,
@@ -88,7 +91,7 @@ server.post('/api/auth/signup', (req, res) => {
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };
-  console.log('NEWUSER', newUser)
+  console.log('NEWUSER', newUser);
   // Add user to database
   db.users.push(newUser);
   saveDb(db);
@@ -105,8 +108,7 @@ server.post('/api/auth/signup', (req, res) => {
       token,
     },
   });
-
-})
+});
 
 // LOGIN
 server.post('/api/auth/login', (req, res) => {
@@ -150,7 +152,7 @@ server.post('/api/auth/login', (req, res) => {
 // COMPLETE ONBOARDING
 server.post('/api/auth/onboarding', (req, res) => {
   const { userId, studyObjective, educationLevel } = req.body;
- console.log('Onboarding request body:', req.body);
+  console.log('Onboarding request body:', req.body);
   if (!userId) {
     return res.status(400).json({
       success: false,
@@ -201,7 +203,7 @@ server.get('/api/auth/me', (req, res) => {
   }
 
   const token = authHeader.split(' ')[1];
-  
+
   // Extract user ID from mock token
   const userId = token.replace('mock-jwt-token-', '');
 
@@ -230,23 +232,24 @@ server.post('/api/auth/logout', (req, res) => {
   });
 });
 
-// CUSTOM Routes 
+// CUSTOM Routes
 
-server.use(jsonServer.rewriter({
+server.use(
+  jsonServer.rewriter({
     '/api/auth/me': '/users/user-1',
-  '/api/boards*': '/boards$1',
-  '/api/boards/:id/notes': '/notes?studyBoardId=:id',
-  '/api/boards/:id/flashcards': '/flashcards?studyBoardId=:id',
-  '/api/boards/:id/quizzes': '/quizzes?studyBoardId=:id',
-  '/api/notes/:id/flashcards': '/flashcards?studyNoteId=:id',
-  '/api/flashcards/due-for-review': '/flashcards?_sort=nextReviewDate&_order=asc&_limit=10',
-  '/api/analytics/overview': '/analytics',
-  '/api/*': '/$1',
-}))
+    '/api/boards*': '/boards$1',
+    '/api/boards/:id/notes': '/notes?studyBoardId=:id',
+    '/api/boards/:id/flashcards': '/flashcards?studyBoardId=:id',
+    '/api/boards/:id/quizzes': '/quizzes?studyBoardId=:id',
+    '/api/notes/:id/flashcards': '/flashcards?studyNoteId=:id',
+    '/api/flashcards/due-for-review': '/flashcards?_sort=nextReviewDate&_order=asc&_limit=10',
+    '/api/analytics/overview': '/analytics',
+    '/api/*': '/$1',
+  })
+);
 
 server.use(middlewares);
-server.use(router)
-
+server.use(router);
 
 const PORT = 3001;
 server.listen(PORT, () => {

@@ -1,7 +1,6 @@
 import type { StateCreator } from 'zustand';
 import type { User, UserPreferences } from '@/types';
 
-
 // UserState interface defines the shape of user-related state in the application
 export interface UserState {
   user: User | null;
@@ -9,16 +8,12 @@ export interface UserState {
   isAuthenticated: boolean;
 }
 
-
 // UserActions interface defines all available user-related actions in the store
 export interface UserActions {
   setUser: (user: User | null) => void;
   updateUser: (updates: Partial<User>) => void;
   setPreferences: (preferences: Partial<UserPreferences>) => void;
-  updatePreference: <K extends keyof UserPreferences>(
-    key: K,
-    value: UserPreferences[K]
-  ) => void;
+  updatePreference: <K extends keyof UserPreferences>(key: K, value: UserPreferences[K]) => void;
   logout: () => void;
   incrementStreak: () => void;
   addStudyTime: (minutes: number) => void;
@@ -40,7 +35,10 @@ const initialState: UserState = {
   isAuthenticated: false,
 };
 
-export const createUserSlice: StateCreator<UserSlice, [['zustand/devtools', never]]> = (set, get) => ({
+export const createUserSlice: StateCreator<UserSlice, [['zustand/devtools', never]]> = (
+  set,
+  get
+) => ({
   ...initialState,
 
   setUser: (user) => {
@@ -97,7 +95,7 @@ export const createUserSlice: StateCreator<UserSlice, [['zustand/devtools', neve
       false,
       'user/logout'
     );
-    
+
     // Clear auth token
     localStorage.removeItem('auth_token');
   },
@@ -132,5 +130,3 @@ export const createUserSlice: StateCreator<UserSlice, [['zustand/devtools', neve
     );
   },
 });
-
-

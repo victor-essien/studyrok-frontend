@@ -1,16 +1,14 @@
 import axios from 'axios';
-import type  { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
+import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import type { ApiError, ApiResponse } from '@/types';
 
-const API_BASE_URL = import.meta.env.DEV 
-  ? 'http://localhost:3001/api'  // JSON Server
+const API_BASE_URL = import.meta.env.DEV
+  ? 'http://localhost:3001/api' // JSON Server
   : import.meta.env.VITE_API_URL; // Production API
 
 class ApiClient {
   private client: AxiosInstance;
   private authToken: string | null = null;
-
-  
 
   constructor() {
     // this.client = axios.create({
@@ -20,13 +18,13 @@ class ApiClient {
     //     'Content-Type': 'application/json',
     //   },
     // });
-     this.client = axios.create({
-    baseURL: API_BASE_URL,
-    // timeout: 10000,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+    this.client = axios.create({
+      baseURL: API_BASE_URL,
+      // timeout: 10000,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
     this.setupInterceptors();
   }
@@ -65,17 +63,17 @@ class ApiClient {
       },
       async (error: AxiosError<ApiError>) => {
         console.log('error from interceptor:', error);
-         console.error('🔴 API Error:', {
-    url: error.config?.url,
-    method: error.config?.method,
-    status: error.response?.status,
-    message: error.message,
-    code: error.code,
-  });
+        console.error('🔴 API Error:', {
+          url: error.config?.url,
+          method: error.config?.method,
+          status: error.response?.status,
+          message: error.message,
+          code: error.code,
+        });
         // Handle errors
         if (error.response) {
           const { status, data } = error.response;
-           
+
           // Handle 401 Unauthorized
           if (status === 401) {
             this.clearAuthToken();

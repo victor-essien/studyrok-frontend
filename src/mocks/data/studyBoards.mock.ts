@@ -1,8 +1,6 @@
-import type { StudyBoard, SourceFile } from "@/types";
-
+import type { StudyBoard, SourceFile } from '@/types';
 
 export const mockSourceFiles: SourceFile[] = [
-
   {
     id: 'file-1',
     filename: '1710512345-biology-chapter5.pdf',
@@ -22,15 +20,15 @@ export const mockSourceFiles: SourceFile[] = [
     storageUrl: 'https://storage.studyrok.com/files/calculus-notes.docx',
     uploadedAt: '2024-03-09T14:20:00Z',
   },
-]
-
+];
 
 export const mockStudyBoards: StudyBoard[] = [
   {
     id: 'board-1',
     userId: 'user-1',
     title: 'Photosynthesis in Plants',
-    description: 'Complete study guide for understanding photosynthesis process, stages, and importance',
+    description:
+      'Complete study guide for understanding photosynthesis process, stages, and importance',
     topic: 'Photosynthesis',
     sourceType: 'pdf',
     sourceFiles: [mockSourceFiles[0]],
@@ -69,7 +67,7 @@ export const mockStudyBoards: StudyBoard[] = [
     quizzesCount: 3,
   },
 
-   {
+  {
     id: 'board-3',
     userId: 'user-1',
     title: 'Calculus Fundamentals',
@@ -91,7 +89,7 @@ export const mockStudyBoards: StudyBoard[] = [
     quizzesCount: 4,
   },
 
-    {
+  {
     id: 'board-4',
     userId: 'user-1',
     title: 'JavaScript Programming Basics',
@@ -111,7 +109,7 @@ export const mockStudyBoards: StudyBoard[] = [
     quizzesCount: 0,
   },
 
-   {
+  {
     id: 'board-5',
     userId: 'user-1',
     title: 'Shakespeare: Hamlet Analysis',
@@ -131,4 +129,4 @@ export const mockStudyBoards: StudyBoard[] = [
     flashcardsCount: 30,
     quizzesCount: 2,
   },
-]
+];

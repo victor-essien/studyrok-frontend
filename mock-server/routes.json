@@ -8,4 +8,3 @@
   "/api/flashcards/due-for-review": "/flashcards?_sort=nextReviewDate&_order=asc&_limit=10",
   "/api/analytics/overview": "/analytics"
 }
-

@@ -1,30 +1,30 @@
-import { QueryClient} from '@tanstack/react-query';
-import type {  DefaultOptions } from '@tanstack/react-query';
+import { QueryClient } from '@tanstack/react-query';
+import type { DefaultOptions } from '@tanstack/react-query';
 
 const queryConfig: DefaultOptions = {
   queries: {
     // Refetch on window focus
     refetchOnWindowFocus: false,
-    
+
     // Refetch on reconnect
     refetchOnReconnect: true,
-    
+
     // Retry failed requests
     retry: 1,
-    
+
     // Stale time (5 minutes)
     staleTime: 5 * 60 * 1000,
-    
+
     // Cache time (10 minutes)
     gcTime: 10 * 60 * 1000,
-    
+
     // Show errors by default
     throwOnError: false,
   },
   mutations: {
     // Don't retry mutations
     retry: false,
-    
+
     // Show errors by default
     throwOnError: false,
   },
@@ -40,14 +40,14 @@ export const queryKeys = {
   auth: {
     me: ['auth', 'me'] as const,
   },
-  
+
   // User
   user: {
     profile: ['user', 'profile'] as const,
     stats: ['user', 'stats'] as const,
     preferences: ['user', 'preferences'] as const,
   },
-  
+
   // Boards
   boards: {
     all: ['boards'] as const,
@@ -56,7 +56,7 @@ export const queryKeys = {
     progress: (id: string) => ['boards', 'progress', id] as const,
     public: ['boards', 'public'] as const,
   },
-  
+
   // Notes
   notes: {
     all: ['notes'] as const,
@@ -64,7 +64,7 @@ export const queryKeys = {
     detail: (id: string) => ['notes', 'detail', id] as const,
     search: (query: string) => ['notes', 'search', query] as const,
   },
-  
+
   // Flashcards
   flashcards: {
     all: ['flashcards'] as const,
@@ -73,7 +73,7 @@ export const queryKeys = {
     detail: (id: string) => ['flashcards', 'detail', id] as const,
     dueForReview: ['flashcards', 'due'] as const,
   },
-  
+
   // Quizzes
   quizzes: {
     all: ['quizzes'] as const,
@@ -81,13 +81,13 @@ export const queryKeys = {
     detail: (id: string) => ['quizzes', 'detail', id] as const,
     results: (id: string) => ['quizzes', 'results', id] as const,
   },
-  
+
   // Videos
   videos: {
     list: (boardId: string) => ['videos', 'list', boardId] as const,
     detail: (id: string) => ['videos', 'detail', id] as const,
   },
-  
+
   // Analytics
   analytics: {
     overview: ['analytics', 'overview'] as const,

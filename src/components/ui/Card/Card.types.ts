@@ -1,12 +1,10 @@
-import  type{ HTMLAttributes, ReactNode } from "react";
-
+import type { HTMLAttributes, ReactNode } from 'react';
 
 export interface CardProps extends HTMLAttributes<HTMLDivElement> {
-
-    children: ReactNode,
-   variant?: 'default' | 'outlined' | 'elevated';
-      padding?: 'none' | 'sm' | 'md' | 'lg';
-       hoverable?: boolean;
+  children: ReactNode;
+  variant?: 'default' | 'outlined' | 'elevated';
+  padding?: 'none' | 'sm' | 'md' | 'lg';
+  hoverable?: boolean;
 
   onClick?: () => void;
 }

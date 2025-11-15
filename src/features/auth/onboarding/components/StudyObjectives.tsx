@@ -2,8 +2,7 @@ import { useState } from 'react';
 import { NotebookText, ArrowLeft, BookOpenText, BookMarked, Lightbulb } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
-
-export default function StudyObjectives({ onNext, onBack } : any) {
+export default function StudyObjectives({ onNext, onBack }: any) {
   const [selected, setSelected] = useState<string | null>(null);
 
   const studyObjectives = [
@@ -41,8 +40,7 @@ export default function StudyObjectives({ onNext, onBack } : any) {
   //   if (onNext) onNext();
   // };
 
-
-    const handleSelect = (objectiveId: string) => {
+  const handleSelect = (objectiveId: string) => {
     setSelected(objectiveId);
     const selectedObjective = studyObjectives.find((level) => level.id === objectiveId);
     onNext(selectedObjective?.label); // ✅ pass value directly

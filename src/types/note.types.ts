@@ -22,7 +22,6 @@ export interface KeyConcept {
   examples?: string[];
 }
 
-
 export interface GenerateNotePayload {
   studyBoardId: string;
   topic: string;

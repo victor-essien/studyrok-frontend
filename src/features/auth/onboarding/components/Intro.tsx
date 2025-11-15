@@ -1,5 +1,4 @@
-import { motion } from "framer-motion";
-
+import { motion } from 'framer-motion';
 
 interface Props {
   onNext?: () => void;
@@ -7,12 +6,9 @@ interface Props {
 }
 
 export const Intro = ({ onNext }: Props) => {
-  
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-700 flex items-center justify-center p-6">
       <motion.div
-        
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: -20 }}
@@ -23,8 +19,7 @@ export const Intro = ({ onNext }: Props) => {
           <h2 className="text-4xl font-bold text-gray-800 mb-4">Welcome to StudyRok!</h2>
           <p className="text-xl text-gray-600 mb-8">Let's personalize your study experience",</p>
 
-         <div className="flex gap-4 justify-center">
-           
+          <div className="flex gap-4 justify-center">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}

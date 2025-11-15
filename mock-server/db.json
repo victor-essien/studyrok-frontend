@@ -46,11 +46,7 @@
       "tokensUsed": 12543,
       "thumbnail": "https://images.unsplash.com/photo-1530587191325-3db32d826c18?w=400",
       "colorTheme": "#10b981",
-      "tags": [
-        "biology",
-        "plants",
-        "science"
-      ],
+      "tags": ["biology", "plants", "science"],
       "isPublic": false,
       "createdAt": "2024-03-10T10:30:00Z",
       "updatedAt": "2024-03-10T10:45:00Z",
@@ -70,10 +66,7 @@
       "tokensUsed": 8934,
       "thumbnail": "https://images.unsplash.com/photo-1577689687200-c8eb4b5e65e1?w=400",
       "colorTheme": "#ef4444",
-      "tags": [
-        "history",
-        "war"
-      ],
+      "tags": ["history", "war"],
       "isPublic": true,
       "createdAt": "2024-03-08T09:00:00Z",
       "updatedAt": "2024-03-08T09:20:00Z",

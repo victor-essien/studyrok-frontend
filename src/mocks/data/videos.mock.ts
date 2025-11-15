@@ -51,7 +51,11 @@ Now go outside and thank a plant for all its hard work! See you in the next vide
       { title: 'Intro', duration: 30, text: 'Introduction to photosynthesis topic' },
       { title: 'The Basics', duration: 90, text: 'What is photosynthesis and the basic equation' },
       { title: 'Where It Happens', duration: 90, text: 'Chloroplasts and chlorophyll explanation' },
-      { title: 'The Two Stages', duration: 90, text: 'Light-dependent and light-independent reactions' },
+      {
+        title: 'The Two Stages',
+        duration: 90,
+        text: 'Light-dependent and light-independent reactions',
+      },
       { title: 'Conclusion', duration: 30, text: 'Summary and closing' },
     ],
     visualCues: [
@@ -73,7 +77,8 @@ export const mockVideos: VideoExplainer[] = [
     studyNoteId: 'note-1',
     userId: 'user-1',
     title: 'Photosynthesis Explained: Introduction',
-    description: 'A comprehensive introduction to photosynthesis, covering the basic process and its importance',
+    description:
+      'A comprehensive introduction to photosynthesis, covering the basic process and its importance',
     script: mockVideoScripts[0].script,
     videoUrl: 'https://storage.studyrok.com/videos/photosynthesis-intro.mp4',
     thumbnailUrl: 'https://images.unsplash.com/photo-1530587191325-3db32d826c18?w=800',

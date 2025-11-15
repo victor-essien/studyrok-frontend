@@ -37,7 +37,10 @@ const initialState: NotificationState = {
   unreadCount: 0,
 };
 
-export const createNotificationSlice: StateCreator<NotificationSlice, [['zustand/devtools', never]]> = (set, get) => ({
+export const createNotificationSlice: StateCreator<
+  NotificationSlice,
+  [['zustand/devtools', never]]
+> = (set, get) => ({
   ...initialState,
 
   addNotification: (notification) => {
@@ -71,9 +74,8 @@ export const createNotificationSlice: StateCreator<NotificationSlice, [['zustand
         const notification = state.notifications.find((n) => n.id === id);
         return {
           notifications: state.notifications.filter((n) => n.id !== id),
-          unreadCount: notification && !notification.read 
-            ? state.unreadCount - 1 
-            : state.unreadCount,
+          unreadCount:
+            notification && !notification.read ? state.unreadCount - 1 : state.unreadCount,
         };
       },
       false,
@@ -88,9 +90,7 @@ export const createNotificationSlice: StateCreator<NotificationSlice, [['zustand
         if (!notification || notification.read) return state;
 
         return {
-          notifications: state.notifications.map((n) =>
-            n.id === id ? { ...n, read: true } : n
-          ),
+          notifications: state.notifications.map((n) => (n.id === id ? { ...n, read: true } : n)),
           unreadCount: Math.max(0, state.unreadCount - 1),
         };
       },
@@ -125,9 +125,7 @@ export const createNotificationSlice: StateCreator<NotificationSlice, [['zustand
     const now = Date.now();
     set(
       (state) => {
-        const filtered = state.notifications.filter(
-          (n) => now - n.timestamp < maxAge
-        );
+        const filtered = state.notifications.filter((n) => now - n.timestamp < maxAge);
         const unreadFiltered = filtered.filter((n) => !n.read).length;
 
         return {

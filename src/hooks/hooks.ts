@@ -1,6 +1,5 @@
-import { useStore } from "@/store/store";
-import {useShallow} from 'zustand/react/shallow'
-
+import { useStore } from '@/store/store';
+import { useShallow } from 'zustand/react/shallow';
 
 // UI Hooks
 export const useTheme = () => {
@@ -106,13 +105,13 @@ export const useToast = () => {
   return {
     success: (title: string, message?: string) =>
       addNotification({ type: 'success', title, message, duration: 3000 }),
-    
+
     error: (title: string, message?: string) =>
       addNotification({ type: 'error', title, message, duration: 5000 }),
-    
+
     warning: (title: string, message?: string) =>
       addNotification({ type: 'warning', title, message, duration: 4000 }),
-    
+
     info: (title: string, message?: string) =>
       addNotification({ type: 'info', title, message, duration: 3000 }),
   };

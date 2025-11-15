@@ -1,11 +1,10 @@
-import type { User } from "@/types";
+import type { User } from '@/types';
 
 export const mockUsers: User[] = [
-
-    {
-        id: 'user-1',
-         email: 'john.doe@studyrok.com',
-        name: 'John Doe',
+  {
+    id: 'user-1',
+    email: 'john.doe@studyrok.com',
+    name: 'John Doe',
     avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=John',
     tier: 'premium',
     studyGoal: 60,
@@ -13,23 +12,22 @@ export const mockUsers: User[] = [
     studyObjective: 'Stay Consistent with studying',
     streak: 15,
     totalStudyTime: 2340,
-    onboarded:true,
+    onboarded: true,
     aiRequestsUsed: 45,
     aiRequestLimit: 100,
     stripeId: 'cus_123456789',
     createdAt: '2024-01-15T08:00:00Z',
     updatedAt: '2024-03-10T14:30:00Z',
-
-    },
-    {
+  },
+  {
     id: 'user-2',
     email: 'sarah.wilson@studyrok.com',
     name: 'Sarah Wilson',
     avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah',
     tier: 'free',
     educationLevel: 'college',
-     onboarded:true,
-     studyGoal: 30,
+    onboarded: true,
+    studyGoal: 30,
     studyObjective: 'Stay Consistent with studying',
     streak: 7,
     totalStudyTime: 890,
@@ -46,9 +44,9 @@ export const mockUsers: User[] = [
     avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Mike',
     tier: 'pro',
     studyGoal: 120,
-        educationLevel: 'college',
-     onboarded:true,
- studyObjective: 'Stay COnsistent',
+    educationLevel: 'college',
+    onboarded: true,
+    studyObjective: 'Stay COnsistent',
     streak: 42,
     totalStudyTime: 5670,
     aiRequestsUsed: 156,
@@ -57,7 +55,6 @@ export const mockUsers: User[] = [
     createdAt: '2023-11-01T07:00:00Z',
     updatedAt: '2024-03-10T16:45:00Z',
   },
-]
-
+];
 
 export const mockCurrentUser = mockUsers[0];

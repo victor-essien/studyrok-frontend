@@ -1,23 +1,21 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { authService } from "../services/authService";
-import { useStore } from "@/store/store";
-import type { SignupPayload, LoginPayload, OnboardingPayload } from "../types/auth.types";
-import { useNavigate } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { authService } from '../services/authService';
+import { useStore } from '@/store/store';
+import type { SignupPayload, LoginPayload, OnboardingPayload } from '../types/auth.types';
+import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-
-
 
 // Signup hook
 export const useSignup = () => {
   const navigate = useNavigate();
   const setUser = useStore((state) => state.setUser);
-//  console.log('useSignup hook initialized, ', setUser);
+  //  console.log('useSignup hook initialized, ', setUser);
   return useMutation({
     mutationFn: (payload: SignupPayload) => authService.signup(payload),
     onSuccess: (data) => {
       setUser(data.user);
       toast.success('Account created successfully!');
-      
+
       // Redirect based on onboarding status
       if (!data.user.onboarded) {
         navigate('/onboarding');
@@ -41,7 +39,7 @@ export const useLogin = () => {
     onSuccess: (data) => {
       setUser(data.user);
       toast.success('Welcome back!');
-      
+
       // Redirect based on onboarding status
       if (!data.user.onboarded) {
         navigate('/onboarding');
@@ -61,12 +59,10 @@ export const useCompleteOnboarding = () => {
   const updateUser = useStore((state) => state.updateUser);
 
   return useMutation({
-    mutationFn: (payload: OnboardingPayload) => 
-      authService.completeOnboarding(payload),
-  onSuccess: (data) => {
-  
+    mutationFn: (payload: OnboardingPayload) => authService.completeOnboarding(payload),
+    onSuccess: (data) => {
       updateUser(data.user);
-      toast.success('Onboarding completed! Let\'s start learning!');
+      toast.success("Onboarding completed! Let's start learning!");
       navigate('/dashboard');
     },
     onError: (error: any) => {
@@ -74,7 +70,6 @@ export const useCompleteOnboarding = () => {
     },
   });
 };
-
 
 // Get current user hook
 export const useCurrentUser = () => {
@@ -85,7 +80,6 @@ export const useCurrentUser = () => {
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 };
-
 
 // Logout hook
 export const useLogout = () => {

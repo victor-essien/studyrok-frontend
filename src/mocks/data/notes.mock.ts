@@ -1,7 +1,7 @@
-import type { StudyNote, KeyConcept } from "@/types";
+import type { StudyNote, KeyConcept } from '@/types';
 
 export const mockKeyConcepts: KeyConcept[] = [
-     {
+  {
     term: 'Photosynthesis',
     definition: 'The process by which green plants convert light energy into chemical energy',
     examples: ['Plants using sunlight', 'Algae in water'],
@@ -16,7 +16,7 @@ export const mockKeyConcepts: KeyConcept[] = [
     definition: 'Simple sugar produced during photosynthesis, used for energy',
     examples: ['C6H12O6', 'Plant food'],
   },
-]
+];
 
 export const mockNotes: StudyNote[] = [
   {
@@ -56,7 +56,8 @@ This means: Carbon dioxide + Water + Light → Glucose + Oxygen
 - **Carbon Dioxide (CO₂)**: Taken in through leaf pores (stomata)
 - **Chlorophyll**: The green pigment that captures light energy`,
     segmentOrder: 1,
-    summary: 'Photosynthesis is the process where plants convert light energy into chemical energy, producing oxygen and glucose. It is essential for life on Earth.',
+    summary:
+      'Photosynthesis is the process where plants convert light energy into chemical energy, producing oxygen and glucose. It is essential for life on Earth.',
     keyConcepts: mockKeyConcepts,
     learningObjectives: [
       'Understand what photosynthesis is',
@@ -114,7 +115,8 @@ The light-dependent reactions produce:
 
 These reactions occur in the **thylakoid membrane** inside chloroplasts.`,
     segmentOrder: 2,
-    summary: 'Light-dependent reactions occur in thylakoid membranes, using light to split water and produce ATP, NADPH, and oxygen.',
+    summary:
+      'Light-dependent reactions occur in thylakoid membranes, using light to split water and produce ATP, NADPH, and oxygen.',
     keyConcepts: [
       {
         term: 'Thylakoid',
@@ -178,7 +180,8 @@ For **one glucose molecule**, the cycle must turn **6 times**:
 - **Glucose** - Used for energy and building plant structures
 - **Other sugars** - Can be converted to starch for storage`,
     segmentOrder: 3,
-    summary: 'The Calvin Cycle uses CO₂, ATP, and NADPH to produce glucose through carbon fixation, reduction, and regeneration phases.',
+    summary:
+      'The Calvin Cycle uses CO₂, ATP, and NADPH to produce glucose through carbon fixation, reduction, and regeneration phases.',
     keyConcepts: [
       {
         term: 'RuBisCO',
@@ -270,7 +273,8 @@ Several environmental factors can limit the rate of photosynthesis:
 
 At any given time, the **slowest factor** determines the overall rate. Increasing other factors won't help if one factor is limiting.`,
     segmentOrder: 4,
-    summary: 'Photosynthesis rate is affected by light intensity, CO₂ concentration, temperature, water, and chlorophyll. The slowest factor limits overall rate.',
+    summary:
+      'Photosynthesis rate is affected by light intensity, CO₂ concentration, temperature, water, and chlorophyll. The slowest factor limits overall rate.',
     keyConcepts: [
       {
         term: 'Limiting Factor',
