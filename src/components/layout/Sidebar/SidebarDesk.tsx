@@ -37,7 +37,7 @@ const SidebarDesk = () => {
 
       {/* Sidebar */}
       <motion.aside
-        className={`fixed lg:static overflow-y-auto inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 hidden lg:flex  flex-col lg:translate-x-0`}
+        className={`fixed  inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 hidden lg:flex  flex-col lg:translate-x-0`}
       >
         {/* Logo */}
         <div className="p-6 border-b border-gray-200 dark:border-gray-700  flex items-center justify-between">

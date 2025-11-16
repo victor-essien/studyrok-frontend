@@ -8,6 +8,7 @@ import { Dashboard } from './pages/Dashboard';
 import { StudyBoardDetailPage } from './features/study-boards/components/StudyBoardDetailPage';
 import { useStore } from '@/store/store';
 import { ThemeModal } from './components/ThemeModal';
+import ReadingNotesPage from './features/notes/components/ReadingNotesPage';
 import { useEffect } from 'react';
 function App() {
   const theme = useStore((state) => state.theme);
@@ -52,6 +53,7 @@ function App() {
         <Route path="/onboarding" element={<Onboarding />} />
         <Route path="/space" element={<Dashboard />} />
         <Route path="/space/studyboard" element={<StudyBoardDetailPage />} />
+        <Route path="/space/notes" element={<ReadingNotesPage />} />
       </Routes>
       {/* Theme Modal */}
       <ThemeModal />

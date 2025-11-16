@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, BookOpen, Clock, CreditCard, Edit3 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface StartLearningModalProps {
   open: boolean;
@@ -54,10 +55,12 @@ export const StartLearningModal: React.FC<StartLearningModalProps> = ({ open, on
               {/* Card 1 */}
               <button className="w-full text-left bg-white dark:bg-gray-800 dark:border-gray-700 border rounded-xl p-4 shadow hover:shadow-md transition flex justify-between items-start">
                 <div>
-                  <p className="font-medium text-gray-900 dark:text-white">Start a new Session</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    Stay focused while reading and learning materials to understand concepts
-                  </p>
+                  <Link to="/space/notes">
+                    <p className="font-medium text-gray-900 dark:text-white">Start a new Session</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                      Stay focused while reading and learning materials to understand concepts
+                    </p>
+                  </Link>
                 </div>
 
                 <div>
