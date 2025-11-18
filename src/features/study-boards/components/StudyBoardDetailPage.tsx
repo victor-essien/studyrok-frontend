@@ -1,14 +1,6 @@
 import Sidebar from '@/components/layout/Sidebar';
 import Header from '@/components/layout/Header/Header';
-import {
-  ArrowLeft,
-  PlayCircle,
-  FileText,
-  Edit3,
-  Layers,
-  Plus,
-  Clock,
-} from 'lucide-react';
+import { ArrowLeft, PlayCircle, FileText, Edit3, Layers, Plus, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { CircularProgress } from '@/components/CircularProgress';
 import { useState } from 'react';

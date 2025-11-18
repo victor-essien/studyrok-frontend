@@ -13,6 +13,7 @@ import {
   Settings,
   FileText,
 } from 'lucide-react';
+import { useStore } from '@/store/store';
 import Sidebar from '@/components/layout/Sidebar';
 import Header from '@/components/layout/Header/Header';
 import SidebarDesk from '@/components/layout/Sidebar/SidebarDesk';
@@ -52,6 +53,9 @@ const mockStudyBoard = {
 
 export const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const user = useStore((state) => state.user);
+
+  console.log('ueserr', user);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-800 flex">

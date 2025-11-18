@@ -73,10 +73,12 @@ export const StartLearningModal: React.FC<StartLearningModalProps> = ({ open, on
               {/* Card 2 */}
               <button className="w-full text-left bg-white  dark:bg-gray-800 dark:border-gray-700 border rounded-xl p-4 shadow hover:shadow-md transition flex justify-between items-start">
                 <div>
-                  <p className="font-medium text-gray-900 dark:text-white">Review Flashcards</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    Understand concepts with smart spaced repetition
-                  </p>
+                  <Link to="/flashcard">
+                    <p className="font-medium text-gray-900 dark:text-white">Review Flashcards</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                      Understand concepts with smart spaced repetition
+                    </p>
+                  </Link>
                 </div>
 
                 <div className="p-2 rounded-md bg-purple-200">

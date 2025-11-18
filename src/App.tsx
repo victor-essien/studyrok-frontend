@@ -10,6 +10,12 @@ import { useStore } from '@/store/store';
 import { ThemeModal } from './components/ThemeModal';
 import ReadingNotesPage from './features/notes/components/ReadingNotesPage';
 import { useEffect } from 'react';
+import FlashcardPage from './features/flashcards/components/FlashcardPage';
+import FlashcardType from './features/flashcards/components/FlashcardType';
+import CreateFlashcard from './features/flashcards/components/CreateFlashcard';
+import MaterialPage from './features/flashcards/components/MaterialPage';
+import RokQuizPage from './features/quizzes/components/RokquizPage';
+import StudyPlanner from './features/planner/components/PlannerPage';
 function App() {
   const theme = useStore((state) => state.theme);
 
@@ -54,6 +60,13 @@ function App() {
         <Route path="/space" element={<Dashboard />} />
         <Route path="/space/studyboard" element={<StudyBoardDetailPage />} />
         <Route path="/space/notes" element={<ReadingNotesPage />} />
+        <Route path="/flashcard" element={<FlashcardPage />} />
+        <Route path="/flashcard/material" element={<MaterialPage />} />
+        <Route path="/flashcard/type" element={<FlashcardType />} />
+        <Route path="/flashcard/create" element={<CreateFlashcard />} />
+        <Route path="/rokquiz" element={<RokQuizPage />} />
+        <Route path="/planner" element={<StudyPlanner />} />
+
       </Routes>
       {/* Theme Modal */}
       <ThemeModal />
