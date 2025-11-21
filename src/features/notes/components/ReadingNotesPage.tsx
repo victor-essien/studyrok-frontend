@@ -1,20 +1,25 @@
 import { useState, useRef, useEffect } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   Play,
   Pause,
   ArrowLeft,
+  Clock,
   Type,
   AlignLeft,
   AlignCenter,
   AlignRight,
   AlignJustify,
   Minus,
+  Brain,
+  Sparkles,
   Plus,
   Highlighter,
   X,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import SidebarDesk from '@/components/layout/Sidebar/SidebarDesk';
+import SessionComplete from '@/features/session/components/SessionComplete';
 
 type HighlightType = {
   color: string;
@@ -32,6 +37,13 @@ const ReadingNotesPage = () => {
   const [selectedText, setSelectedText] = useState('');
   const [highlightColor, setHighlightColor] = useState('#fef08a');
   const [highlights, setHighlights] = useState<HighlightType[]>([]);
+  const [sessionState, setSessionState] = useState<'active' | 'completed'>('active');
+  const [explanation, setExplanation] = useState('');
+  const [showExplainPopup, setShowExplainPopup] = useState(false);
+  const [isExplaining, setIsExplaining] = useState(false);
+  const [sessionTime, setSessionTime] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
   const [showMobileTools, setShowMobileTools] = useState(false);
   const [showMobileTip, setShowMobileTip] = useState(true);
   const contentRef = useRef(null);
@@ -52,6 +64,16 @@ Field-Effect Transistors operate differently from BJTs. Instead of using current
 Transistors are semiconductor devices that act as electrically controlled switches or amplifiers. They revolutionized electronics by replacing bulky vacuum tubes with small, low-power, solid-state components. BJTs and FETs differ fundamentally in their operating principles, but both achieve control over a larger current flow using a smaller input signal.
 The BJT is a three-terminal device consisting of two PN junctions. It operates based on the injection of minority carriers across the base region. The three terminals are the emitter, base, and collector. Current flowing into the base terminal controls a much larger current between the collector and emitter.
 Field-Effect Transistors operate differently from BJTs. Instead of using current to control cu.`;
+
+  // Timer
+  useEffect(() => {
+    if (sessionState === 'active' && !isPaused) {
+      const interval = setInterval(() => {
+        setSessionTime((prev) => prev + 1);
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [sessionState, isPaused]);
 
   const handleTextSelection = () => {
     // Prevent default touch selection behavior on mobile
@@ -77,7 +99,19 @@ Field-Effect Transistors operate differently from BJTs. Instead of using current
       setShowPopup(false);
     }
   };
+  const formatTime = (seconds: number) => {
+    const hours = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
 
+    if (hours > 0) {
+      return `${hours}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+  const handleEndSession = () => {
+    setSessionState('completed');
+  };
   const handleExplainTerm = () => {
     alert(
       `Explaining: "${selectedText}"\n\nThis would open an explanation modal or sidebar with details about the selected term.`
@@ -163,37 +197,377 @@ Field-Effect Transistors operate differently from BJTs. Instead of using current
     }
   };
   console.log('Mobile tools????', showMobileTools);
-  return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex">
-      {/* Sidebar */}
-      <SidebarDesk />
-      <div className="flex-1  flex flex-col lg:ml-64 min-h-screen">
-        {/* Header */}
-        <header className="bg-white border-b dark:bg-gray-800 border-gray-200 dark:border-gray-700 sticky flex top-0 z-10">
-          <button
-            onClick={() => navigate(-1)}
-            className="text-gray-800 dark:text-gray-200 rounded-full p-2 hover:text-purple-400 transition-colors"
-          >
-            <ArrowLeft className="w-6 h-6" />
-          </button>
-          <div className="max-w-7xl mx-auto px-4 py-4">
-            <h1 className="text-xl font-semibold text-gray-800 dark:text-white">
-              Transistor Physics and Operation: BJTs and FETs
-            </h1>
-          </div>
-        </header>
+  if (sessionState === 'active' && sampleContent) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex">
+        {/* Sidebar */}
+        <SidebarDesk />
 
-        {/* Control Bar */}
-        <div className="bg-white border-b dark:bg-gray-800 border-gray-200 dark:border-gray-700 sticky top-16 z-10 hidden md:block">
-          <div className="max-w-7xl mx-auto px-4 py-3">
-            <div className="flex flex-wrap items-center gap-4">
+        <div className="flex-1  flex flex-col lg:ml-64 min-h-screen">
+          {/* Header */}
+          <header className="bg-white border-b dark:bg-gray-800 border-gray-200 dark:border-gray-700 sticky flex flex-col top-0 z-10">
+            <div className="flex">
+              <button
+                // onClick={() => navigate(-1)}
+                onClick={handleEndSession}
+                className="text-gray-800 dark:text-gray-200 rounded-full p-2 hover:text-purple-400 transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+              <div className="max-w-7xl mx-auto px-4 py-4">
+                <h1 className="text-xl font-semibold text-gray-800 dark:text-white truncate">
+                  Transistor Physics and Operation: BJTs and FETs
+                </h1>
+              </div>
+            </div>
+
+            {/* Mobile Timer */}
+            <div className=" justify-center flex items-center md:hidden mb-2  gap-3">
+              {/* Timer */}
+              <div className="flex items-center gap-2 px-4 py-2 bg-purple-100 dark:bg-purple-300 rounded-lg">
+                <Clock className="w-5 h-5 text-purple-600" />
+                <span className="font-bold text-purple-900 dark:text-purple-700">
+                  {formatTime(sessionTime)}
+                </span>
+              </div>
+
+              {/* Pause/Resume */}
+              <button
+                onClick={() => setIsPaused(!isPaused)}
+                className="p-2 hover:bg-gray-100 rounded-lg transition"
+              >
+                {isPaused ? (
+                  <Play className="w-6 h-6 text-gray-700 dark:text-gray-300" />
+                ) : (
+                  <Pause className="w-6 h-6 text-gray-700 dark:text-gray-300" />
+                )}
+              </button>
+            </div>
+          </header>
+
+          {/* Control Bar */}
+          <div className="bg-white border-b dark:bg-gray-800 border-gray-200 dark:border-gray-700 sticky top-16 z-10 hidden md:block">
+            <div className="max-w-7xl mx-auto px-4 py-3">
+              <div className="flex flex-wrap items-center gap-4">
+                {/* Font Family */}
+                <div className="flex items-center gap-2">
+                  <Type size={18} className="text-gray-600 dark:text-gray-300" />
+                  <select
+                    value={fontFamily}
+                    onChange={(e) => setFontFamily(e.target.value)}
+                    className="px-3 py-1.5 border border-gray-300 dark:border-gray-500 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  >
+                    <option value="Arial">Arial</option>
+                    <option value="Georgia">Georgia</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                    <option value="Verdana">Verdana</option>
+                    <option value="Courier New">Courier New</option>
+                  </select>
+                </div>
+
+                {/* Font Size */}
+                <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-600 rounded-lg px-2 py-1">
+                  <button
+                    onClick={() => setFontSize(Math.max(12, fontSize - 1))}
+                    className="p-1.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition"
+                    aria-label="Decrease font size"
+                  >
+                    <Minus size={16} className="dark:text-white text-gray-700" />
+                  </button>
+                  <span className="text-sm font-medium w-8 text-center dark:text-white text-gray-700">
+                    {fontSize}
+                  </span>
+                  <button
+                    onClick={() => setFontSize(Math.min(32, fontSize + 1))}
+                    className="p-1.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition"
+                    aria-label="Increase font size"
+                  >
+                    <Plus size={16} className="dark:text-white text-gray-700" />
+                  </button>
+                </div>
+
+                {/* Text Alignment */}
+                <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-600 dark:hover:bg-gray-600 rounded-lg p-1">
+                  <button
+                    onClick={() => setTextAlign('left')}
+                    className={`p-1.5 rounded transition ${textAlign === 'left' ? 'bg-white dark:bg-gray-800 shadow' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
+                    aria-label="Align left"
+                  >
+                    <AlignLeft size={16} className="dark:text-white text-gray-700" />
+                  </button>
+                  <button
+                    onClick={() => setTextAlign('center')}
+                    className={`p-1.5 rounded transition ${textAlign === 'center' ? 'bg-white shadow dark:bg-gray-800' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
+                    aria-label="Align center"
+                  >
+                    <AlignCenter size={16} className="dark:text-white text-gray-700" />
+                  </button>
+                  <button
+                    onClick={() => setTextAlign('right')}
+                    className={`p-1.5 rounded transition ${textAlign === 'right' ? 'bg-white shadow dark:bg-gray-800' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
+                    aria-label="Align right"
+                  >
+                    <AlignRight size={16} className="dark:text-white text-gray-700" />
+                  </button>
+                  <button
+                    onClick={() => setTextAlign('justify')}
+                    className={`p-1.5 rounded transition ${textAlign === 'justify' ? 'bg-white shadow dark:bg-gray-800' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
+                    aria-label="Justify"
+                  >
+                    <AlignJustify size={16} className="dark:text-white text-gray-700" />
+                  </button>
+                </div>
+
+                {/* Line Height */}
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-gray-600 dark:text-gray-300">Line Height:</span>
+                  <input
+                    type="range"
+                    min="1.2"
+                    max="2.5"
+                    step="0.1"
+                    value={lineHeight}
+                    onChange={(e) => setLineHeight(parseFloat(e.target.value))}
+                    className="w-24"
+                  />
+                  <span className="text-sm font-medium w-8 dark:text-white text-gray-700">
+                    {lineHeight.toFixed(1)}
+                  </span>
+                </div>
+
+                {/* Paragraph Spacing */}
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-gray-600 dark:text-gray-300 dark:text-300">
+                    Spacing:
+                  </span>
+                  <input
+                    type="range"
+                    min="8"
+                    max="32"
+                    step="4"
+                    value={paragraphSpacing}
+                    onChange={(e) => setParagraphSpacing(parseInt(e.target.value))}
+                    className="w-24"
+                  />
+                  <span className="text-sm font-medium w-8 dark:text-white text-gray-700">
+                    {paragraphSpacing}
+                  </span>
+                </div>
+
+                {/* Highlight Color */}
+                <div className="flex items-center gap-2">
+                  <Highlighter size={18} className="text-gray-600 dark:text-gray-300" />
+                  <input
+                    type="color"
+                    value={highlightColor}
+                    onChange={(e) => setHighlightColor(e.target.value)}
+                    className="w-10 h-8 rounded cursor-pointer "
+                    title="Highlight color"
+                  />
+                </div>
+
+                {/* Clear Highlights */}
+                {highlights.length > 0 && (
+                  <button
+                    onClick={clearHighlights}
+                    className="px-3 py-1.5 text-sm bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition"
+                  >
+                    Clear Highlights
+                  </button>
+                )}
+
+                {/* Text-to-Speech */}
+                <button
+                  onClick={toggleTextToSpeech}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
+                    isPlaying
+                      ? 'bg-purple-600 text-white hover:bg-purple-700'
+                      : 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 hover:bg-gray-300'
+                  }`}
+                >
+                  {isPlaying ? <Pause size={18} /> : <Play size={18} />}
+                  <span className="text-sm font-medium">{isPlaying ? 'Stop' : 'Read Aloud'}</span>
+                </button>
+
+                <div className="md:flex items-center gap-3 hidden">
+                  {/* Timer */}
+                  <div className="flex items-center gap-2 px-4 py-2 bg-purple-100 dark:bg-purple-300 rounded-lg">
+                    <Clock className="w-5 h-5 text-purple-600" />
+                    <span className="font-bold text-purple-900 dark:text-purple-700">
+                      {formatTime(sessionTime)}
+                    </span>
+                  </div>
+
+                  {/* Pause/Resume */}
+                  <button
+                    onClick={() => setIsPaused(!isPaused)}
+                    className="p-2 hover:bg-gray-100 rounded-lg transition"
+                  >
+                    {isPaused ? (
+                      <Play className="w-6 h-6 text-gray-700 dark:text-gray-300" />
+                    ) : (
+                      <Pause className="w-6 h-6 text-gray-700 dark:text-gray-300" />
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* AI Explanation */}
+          <AnimatePresence>
+            {explanation && (
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700  border-2 rounded-2xl p-6 mb-6"
+              >
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Sparkles className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-bold text-purple-900">AI Explanation</h4>
+                      <button
+                        onClick={() => setExplanation('')}
+                        className="text-gray-500 hover:text-gray-700"
+                      >
+                        <X className="w-5 h-5" />
+                      </button>
+                    </div>
+                    <p className="text-gray-700 leading-relaxed">{explanation}</p>
+                    <div className="mt-3 pt-3 border-t border-purple-200">
+                      <span className="text-sm text-purple-700 font-medium">
+                        Term: "{selectedText}"
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {isExplaining && (
+            <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 mb-6 shadow-lg">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin" />
+                <span className="text-gray-700 dark:text-gray-300 ">Generating explanation...</span>
+              </div>
+            </div>
+          )}
+
+          {/* Reading Content */}
+          <main className="max-w-4xl mx-auto px-2 py-4">
+            {/* Mobile Tip */}
+            {showMobileTip && (
+              <div className="md:hidden mb-4 bg-purple-100 dark:bg-gray-700 text-purple-800 dark:text-purple-500 px-4 py-3 rounded-lg flex items-center justify-between animate-pulse">
+                <span className="text-sm font-medium">💡 Tap the screen to view tools</span>
+                <button
+                  onClick={() => setShowMobileTip(false)}
+                  className="text-purple-600 hover:text-purple-800 text-xl leading-none"
+                >
+                  ×
+                </button>
+              </div>
+            )}
+
+            <div
+              ref={contentRef}
+              onMouseUp={handleTextSelection}
+              onTouchEnd={handleTextSelection}
+              onClick={handleMobileScreenTap}
+              className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-8 md:p-12 select-text"
+              style={{
+                fontSize: `${fontSize}px`,
+                fontFamily: fontFamily,
+                textAlign: textAlign,
+                lineHeight: lineHeight,
+                WebkitUserSelect: 'text',
+                WebkitTouchCallout: 'none',
+              }}
+            >
+              {sampleContent.split('\n\n').map((paragraph, index) => (
+                <p
+                  key={index}
+                  style={{ marginBottom: `${paragraphSpacing}px` }}
+                  className="text-gray-800 dark:text-gray-300"
+                >
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+          </main>
+
+          {/* Selection Popup */}
+          {showPopup && (
+            <div
+              className="selection-popup fixed z-50 transform -translate-x-1/2 -translate-y-full"
+              style={{
+                left: `${popupPosition.x}px`,
+                top: `${popupPosition.y}px`,
+              }}
+            >
+              <div className="bg-gray-900 dark:bg-gray-100 dark:text-gray-900 text-white rounded-lg shadow-lg px-3 py-2 mb-2 flex items-center gap-3">
+                <button
+                  onClick={handleHighlight}
+                  className="text-sm font-medium hover:text-yellow-300 rounded-lg  active:text-yellow-300 transition whitespace-nowrap flex items-center gap-1 py-1"
+                >
+                  <Highlighter size={14} />
+                  Highlight
+                </button>
+                <div className="w-px h-4 bg-gray-600 dark:bg-gray-300" />
+                <button
+                  onClick={handleExplainTerm}
+                  className="text-sm font-medium hover:text-purple-300 active:text-purple-300 transition whitespace-nowrap py-1"
+                >
+                  Explain term
+                </button>
+              </div>
+              <div
+                className="w-0 h-0 mx-auto"
+                style={{
+                  borderLeft: '6px solid transparent',
+                  borderRight: '6px solid transparent',
+                  borderTop: '6px solid #111827',
+                }}
+              />
+            </div>
+          )}
+
+          {/* Mobile Tools Bottom Sheet */}
+          <div
+            className={`md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t-2 border-gray-200 dark:border-gray-700 shadow-2xl z-50 transition-transform duration-300 ${
+              showMobileTools ? 'translate-y-0' : 'translate-y-full'
+            }`}
+          >
+            <div className="px-4 py-4 max-h-[70vh] overflow-y-auto">
+              {/* Handle Bar */}
+              <div className="flex justify-center mb-4">
+                <div className="w-12 h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full" />
+              </div>
+              <div className="flex justify-between items-center  mb-4">
+                <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-100">
+                  Reading Tools
+                </h3>
+                {/* Close Button */}
+                <button
+                  onClick={() => setShowMobileTools(false)}
+                  className="text-gray-400 rounded-lg  bg-gray-700 hover:text-purple-800 text-xl leading-none"
+                >
+                  <X size={30} />
+                </button>
+              </div>
               {/* Font Family */}
-              <div className="flex items-center gap-2">
-                <Type size={18} className="text-gray-600 dark:text-gray-300" />
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                  Font Family
+                </label>
                 <select
                   value={fontFamily}
                   onChange={(e) => setFontFamily(e.target.value)}
-                  className="px-3 py-1.5 border border-gray-300 dark:border-gray-500 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                 >
                   <option value="Arial">Arial</option>
                   <option value="Georgia">Georgia</option>
@@ -204,61 +578,72 @@ Field-Effect Transistors operate differently from BJTs. Instead of using current
               </div>
 
               {/* Font Size */}
-              <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-600 rounded-lg px-2 py-1">
-                <button
-                  onClick={() => setFontSize(Math.max(12, fontSize - 1))}
-                  className="p-1.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition"
-                  aria-label="Decrease font size"
-                >
-                  <Minus size={16} className="dark:text-white text-gray-700" />
-                </button>
-                <span className="text-sm font-medium w-8 text-center dark:text-white text-gray-700">
-                  {fontSize}
-                </span>
-                <button
-                  onClick={() => setFontSize(Math.min(32, fontSize + 1))}
-                  className="p-1.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition"
-                  aria-label="Increase font size"
-                >
-                  <Plus size={16} className="dark:text-white text-gray-700" />
-                </button>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                  Font Size: {fontSize}px
+                </label>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => setFontSize(Math.max(12, fontSize - 1))}
+                    className="p-2 bg-gray-100 dark:bg-gray-800 dark:active:bg-gray-700 rounded-lg active:bg-gray-200"
+                  >
+                    <Minus size={20} className="dark:text-white text-gray-700" />
+                  </button>
+                  <input
+                    type="range"
+                    min="12"
+                    max="32"
+                    value={fontSize}
+                    onChange={(e) => setFontSize(parseInt(e.target.value))}
+                    className="flex-1"
+                  />
+                  <button
+                    onClick={() => setFontSize(Math.min(32, fontSize + 1))}
+                    className="p-2 bg-gray-100 dark:bg-gray-800 dark:active:bg-gray-700 rounded-lg active:bg-gray-200"
+                  >
+                    <Plus size={20} className="dark:text-white text-gray-700" />
+                  </button>
+                </div>
               </div>
 
               {/* Text Alignment */}
-              <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-600 dark:hover:bg-gray-600 rounded-lg p-1">
-                <button
-                  onClick={() => setTextAlign('left')}
-                  className={`p-1.5 rounded transition ${textAlign === 'left' ? 'bg-white dark:bg-gray-800 shadow' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
-                  aria-label="Align left"
-                >
-                  <AlignLeft size={16} className="dark:text-white text-gray-700" />
-                </button>
-                <button
-                  onClick={() => setTextAlign('center')}
-                  className={`p-1.5 rounded transition ${textAlign === 'center' ? 'bg-white shadow dark:bg-gray-800' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
-                  aria-label="Align center"
-                >
-                  <AlignCenter size={16} className="dark:text-white text-gray-700" />
-                </button>
-                <button
-                  onClick={() => setTextAlign('right')}
-                  className={`p-1.5 rounded transition ${textAlign === 'right' ? 'bg-white shadow dark:bg-gray-800' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
-                  aria-label="Align right"
-                >
-                  <AlignRight size={16} className="dark:text-white text-gray-700" />
-                </button>
-                <button
-                  onClick={() => setTextAlign('justify')}
-                  className={`p-1.5 rounded transition ${textAlign === 'justify' ? 'bg-white shadow dark:bg-gray-800' : 'hover:bg-gray-200 dark:hover:bg-gray-700'}`}
-                  aria-label="Justify"
-                >
-                  <AlignJustify size={16} className="dark:text-white text-gray-700" />
-                </button>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                  Text Alignment
+                </label>
+                <div className="grid grid-cols-4 gap-2">
+                  <button
+                    onClick={() => setTextAlign('left')}
+                    className={`p-3 rounded-lg transition ${textAlign === 'left' ? 'bg-purple-600 text-white' : 'bg-gray-100 dark:bg-gray-800 dark:text-gray-100'}`}
+                  >
+                    <AlignLeft size={20} className="mx-auto dark:text-white text-gray-700" />
+                  </button>
+                  <button
+                    onClick={() => setTextAlign('center')}
+                    className={`p-3 rounded-lg transition ${textAlign === 'center' ? 'bg-purple-600 text-white' : 'bg-gray-100 dark:bg-gray-800 dark:text-gray-100'}`}
+                  >
+                    <AlignCenter size={20} className="mx-auto dark:text-white text-gray-700" />
+                  </button>
+                  <button
+                    onClick={() => setTextAlign('right')}
+                    className={`p-3 rounded-lg transition ${textAlign === 'right' ? 'bg-purple-600 text-white' : 'bg-gray-100 dark:bg-gray-800 dark:text-gray-100'}`}
+                  >
+                    <AlignRight size={20} className="mx-auto dark:text-white text-gray-700" />
+                  </button>
+                  <button
+                    onClick={() => setTextAlign('justify')}
+                    className={`p-3 rounded-lg transition ${textAlign === 'justify' ? 'bg-purple-600 text-white' : 'bg-gray-100 dark:bg-gray-800 dark:text-gray-100'}`}
+                  >
+                    <AlignJustify size={20} className="mx-auto dark:text-white text-gray-700 " />
+                  </button>
+                </div>
               </div>
 
               {/* Line Height */}
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-600 dark:text-gray-300">Line Height:</span>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                  Line Height: {lineHeight.toFixed(1)}
+                </label>
                 <input
                   type="range"
                   min="1.2"
@@ -266,18 +651,15 @@ Field-Effect Transistors operate differently from BJTs. Instead of using current
                   step="0.1"
                   value={lineHeight}
                   onChange={(e) => setLineHeight(parseFloat(e.target.value))}
-                  className="w-24"
+                  className="w-full"
                 />
-                <span className="text-sm font-medium w-8 dark:text-white text-gray-700">
-                  {lineHeight.toFixed(1)}
-                </span>
               </div>
 
               {/* Paragraph Spacing */}
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-600 dark:text-gray-300 dark:text-300">
-                  Spacing:
-                </span>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                  Paragraph Spacing: {paragraphSpacing}px
+                </label>
                 <input
                   type="range"
                   min="8"
@@ -285,316 +667,68 @@ Field-Effect Transistors operate differently from BJTs. Instead of using current
                   step="4"
                   value={paragraphSpacing}
                   onChange={(e) => setParagraphSpacing(parseInt(e.target.value))}
-                  className="w-24"
+                  className="w-full"
                 />
-                <span className="text-sm font-medium w-8 dark:text-white text-gray-700">
-                  {paragraphSpacing}
-                </span>
               </div>
 
               {/* Highlight Color */}
-              <div className="flex items-center gap-2">
-                <Highlighter size={18} className="text-gray-600 dark:text-gray-300" />
-                <input
-                  type="color"
-                  value={highlightColor}
-                  onChange={(e) => setHighlightColor(e.target.value)}
-                  className="w-10 h-8 rounded cursor-pointer "
-                  title="Highlight color"
-                />
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                  Highlight Color
+                </label>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="color"
+                    value={highlightColor}
+                    onChange={(e) => setHighlightColor(e.target.value)}
+                    className="w-16 h-12 rounded-lg cursor-pointer"
+                  />
+                  <span className="text-sm text-gray-600 dark:text-gray-300">
+                    Select text to highlight
+                  </span>
+                </div>
               </div>
 
               {/* Clear Highlights */}
               {highlights.length > 0 && (
                 <button
                   onClick={clearHighlights}
-                  className="px-3 py-1.5 text-sm bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition"
+                  className="w-full mb-4 px-4 py-3 bg-red-100 text-red-700 rounded-lg font-medium active:bg-red-200"
                 >
-                  Clear Highlights
+                  Clear All Highlights ({highlights.length})
                 </button>
               )}
 
               {/* Text-to-Speech */}
               <button
                 onClick={toggleTextToSpeech}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
+                className={`w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium transition ${
                   isPlaying
-                    ? 'bg-purple-600 text-white hover:bg-purple-700'
-                    : 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 hover:bg-gray-300'
+                    ? 'bg-purple-600 text-white active:bg-purple-700'
+                    : 'bg-gray-200 dark:bg-gray-700 dark:text-gray-200 active:dark:bg-gray-300 text-gray-700 active:bg-gray-300'
                 }`}
               >
-                {isPlaying ? <Pause size={18} /> : <Play size={18} />}
-                <span className="text-sm font-medium">{isPlaying ? 'Stop' : 'Read Aloud'}</span>
+                {isPlaying ? <Pause size={20} /> : <Play size={20} />}
+                <span>{isPlaying ? 'Stop Reading' : 'Read Aloud'}</span>
               </button>
-            </div>
-          </div>
-        </div>
 
-        {/* Reading Content */}
-        <main className="max-w-4xl mx-auto px-2 py-4">
-          {/* Mobile Tip */}
-          {showMobileTip && (
-            <div className="md:hidden mb-4 bg-purple-100 text-purple-800 px-4 py-3 rounded-lg flex items-center justify-between animate-pulse">
-              <span className="text-sm font-medium">💡 Tap the screen to view tools</span>
-              <button
-                onClick={() => setShowMobileTip(false)}
-                className="text-purple-600 hover:text-purple-800 text-xl leading-none"
-              >
-                ×
-              </button>
-            </div>
-          )}
-
-          <div
-            ref={contentRef}
-            onMouseUp={handleTextSelection}
-            onTouchEnd={handleTextSelection}
-            onClick={handleMobileScreenTap}
-            className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-8 md:p-12 select-text"
-            style={{
-              fontSize: `${fontSize}px`,
-              fontFamily: fontFamily,
-              textAlign: textAlign,
-              lineHeight: lineHeight,
-              WebkitUserSelect: 'text',
-              WebkitTouchCallout: 'none',
-            }}
-          >
-            {sampleContent.split('\n\n').map((paragraph, index) => (
-              <p
-                key={index}
-                style={{ marginBottom: `${paragraphSpacing}px` }}
-                className="text-gray-800 dark:text-gray-300"
-              >
-                {paragraph}
-              </p>
-            ))}
-          </div>
-        </main>
-
-        {/* Selection Popup */}
-        {showPopup && (
-          <div
-            className="selection-popup fixed z-50 transform -translate-x-1/2 -translate-y-full"
-            style={{
-              left: `${popupPosition.x}px`,
-              top: `${popupPosition.y}px`,
-            }}
-          >
-            <div className="bg-gray-900 dark:bg-gray-100 dark:text-gray-900 text-white rounded-lg shadow-lg px-3 py-2 mb-2 flex items-center gap-3">
-              <button
-                onClick={handleHighlight}
-                className="text-sm font-medium hover:text-yellow-300 rounded-lg  active:text-yellow-300 transition whitespace-nowrap flex items-center gap-1 py-1"
-              >
-                <Highlighter size={14} />
-                Highlight
-              </button>
-              <div className="w-px h-4 bg-gray-600 dark:bg-gray-300" />
-              <button
-                onClick={handleExplainTerm}
-                className="text-sm font-medium hover:text-purple-300 active:text-purple-300 transition whitespace-nowrap py-1"
-              >
-                Explain term
-              </button>
-            </div>
-            <div
-              className="w-0 h-0 mx-auto"
-              style={{
-                borderLeft: '6px solid transparent',
-                borderRight: '6px solid transparent',
-                borderTop: '6px solid #111827',
-              }}
-            />
-          </div>
-        )}
-
-        {/* Mobile Tools Bottom Sheet */}
-        <div
-          className={`md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t-2 border-gray-200 dark:border-gray-700 shadow-2xl z-50 transition-transform duration-300 ${
-            showMobileTools ? 'translate-y-0' : 'translate-y-full'
-          }`}
-        >
-          <div className="px-4 py-4 max-h-[70vh] overflow-y-auto">
-            {/* Handle Bar */}
-            <div className="flex justify-center mb-4">
-              <div className="w-12 h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full" />
-            </div>
-            <div className="flex justify-between items-center  mb-4">
-              <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-100">
-                Reading Tools
-              </h3>
-              {/* Close Button */}
-              <button
-                onClick={() => setShowMobileTools(false)}
-                className="text-gray-400 rounded-lg  bg-gray-700 hover:text-purple-800 text-xl leading-none"
-              >
-                <X size={30} />
-              </button>
-            </div>
-            {/* Font Family */}
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                Font Family
-              </label>
-              <select
-                value={fontFamily}
-                onChange={(e) => setFontFamily(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-              >
-                <option value="Arial">Arial</option>
-                <option value="Georgia">Georgia</option>
-                <option value="Times New Roman">Times New Roman</option>
-                <option value="Verdana">Verdana</option>
-                <option value="Courier New">Courier New</option>
-              </select>
-            </div>
-
-            {/* Font Size */}
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                Font Size: {fontSize}px
-              </label>
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => setFontSize(Math.max(12, fontSize - 1))}
-                  className="p-2 bg-gray-100 dark:bg-gray-800 dark:active:bg-gray-700 rounded-lg active:bg-gray-200"
-                >
-                  <Minus size={20} className="dark:text-white text-gray-700" />
-                </button>
-                <input
-                  type="range"
-                  min="12"
-                  max="32"
-                  value={fontSize}
-                  onChange={(e) => setFontSize(parseInt(e.target.value))}
-                  className="flex-1"
-                />
-                <button
-                  onClick={() => setFontSize(Math.min(32, fontSize + 1))}
-                  className="p-2 bg-gray-100 dark:bg-gray-800 dark:active:bg-gray-700 rounded-lg active:bg-gray-200"
-                >
-                  <Plus size={20} className="dark:text-white text-gray-700" />
-                </button>
-              </div>
-            </div>
-
-            {/* Text Alignment */}
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                Text Alignment
-              </label>
-              <div className="grid grid-cols-4 gap-2">
-                <button
-                  onClick={() => setTextAlign('left')}
-                  className={`p-3 rounded-lg transition ${textAlign === 'left' ? 'bg-purple-600 text-white' : 'bg-gray-100 dark:bg-gray-800 dark:text-gray-100'}`}
-                >
-                  <AlignLeft size={20} className="mx-auto dark:text-white text-gray-700" />
-                </button>
-                <button
-                  onClick={() => setTextAlign('center')}
-                  className={`p-3 rounded-lg transition ${textAlign === 'center' ? 'bg-purple-600 text-white' : 'bg-gray-100 dark:bg-gray-800 dark:text-gray-100'}`}
-                >
-                  <AlignCenter size={20} className="mx-auto dark:text-white text-gray-700" />
-                </button>
-                <button
-                  onClick={() => setTextAlign('right')}
-                  className={`p-3 rounded-lg transition ${textAlign === 'right' ? 'bg-purple-600 text-white' : 'bg-gray-100 dark:bg-gray-800 dark:text-gray-100'}`}
-                >
-                  <AlignRight size={20} className="mx-auto dark:text-white text-gray-700" />
-                </button>
-                <button
-                  onClick={() => setTextAlign('justify')}
-                  className={`p-3 rounded-lg transition ${textAlign === 'justify' ? 'bg-purple-600 text-white' : 'bg-gray-100 dark:bg-gray-800 dark:text-gray-100'}`}
-                >
-                  <AlignJustify size={20} className="mx-auto dark:text-white text-gray-700 " />
-                </button>
-              </div>
-            </div>
-
-            {/* Line Height */}
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                Line Height: {lineHeight.toFixed(1)}
-              </label>
-              <input
-                type="range"
-                min="1.2"
-                max="2.5"
-                step="0.1"
-                value={lineHeight}
-                onChange={(e) => setLineHeight(parseFloat(e.target.value))}
-                className="w-full"
-              />
-            </div>
-
-            {/* Paragraph Spacing */}
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                Paragraph Spacing: {paragraphSpacing}px
-              </label>
-              <input
-                type="range"
-                min="8"
-                max="32"
-                step="4"
-                value={paragraphSpacing}
-                onChange={(e) => setParagraphSpacing(parseInt(e.target.value))}
-                className="w-full"
-              />
-            </div>
-
-            {/* Highlight Color */}
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                Highlight Color
-              </label>
-              <div className="flex items-center gap-3">
-                <input
-                  type="color"
-                  value={highlightColor}
-                  onChange={(e) => setHighlightColor(e.target.value)}
-                  className="w-16 h-12 rounded-lg cursor-pointer"
-                />
-                <span className="text-sm text-gray-600 dark:text-gray-300">
-                  Select text to highlight
-                </span>
-              </div>
-            </div>
-
-            {/* Clear Highlights */}
-            {highlights.length > 0 && (
-              <button
-                onClick={clearHighlights}
-                className="w-full mb-4 px-4 py-3 bg-red-100 text-red-700 rounded-lg font-medium active:bg-red-200"
-              >
-                Clear All Highlights ({highlights.length})
-              </button>
-            )}
-
-            {/* Text-to-Speech */}
-            <button
-              onClick={toggleTextToSpeech}
-              className={`w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium transition ${
-                isPlaying
-                  ? 'bg-purple-600 text-white active:bg-purple-700'
-                  : 'bg-gray-200 dark:bg-gray-700 dark:text-gray-200 active:dark:bg-gray-300 text-gray-700 active:bg-gray-300'
-              }`}
-            >
-              {isPlaying ? <Pause size={20} /> : <Play size={20} />}
-              <span>{isPlaying ? 'Stop Reading' : 'Read Aloud'}</span>
-            </button>
-
-            {/* Close Button
+              {/* Close Button
           <button
             onClick={() => setShowMobileTools(false)}
             className="w-full mt-4 px-4 py-3 bg-gray-100 dark:bg-gray-800 dark:text-gray-20 text-gray-700 rounded-lg font-medium dark:active:bg-gray-700 active:bg-gray-200"
           >
             Close
           </button> */}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    );
+  }
+
+  return (
+    // <SessionComplete sessionTime={sessionTime}  highlights={5} />
+    <div></div>
   );
 };
 

@@ -1,176 +1,519 @@
-<div className=" bg-gray-50 dark:bg-gray-900 flex">
-  {/* Sidebar */}
-  <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-  <SidebarDesk />
-  <div className="flex-1 flex flex-col lg:ml-64 min-h-screen">
-    {/* Header */}
-    <div className=" bg-white dark:bg-gray-800 mx-4  px-4 lg:px-8  py-4 flex items-center justify-between border-b border-gray-200 dark:border-gray-700 sticky top-0 z-30  rounded-2xl shadow-md p-2 mb-6 ">
-      <div className="flex items-center gap-4">
-        <button
-          onClick={() => setQuizState('start')}
-          className="p-2 hover:bg-gray-100 dark:hover:bg-gray-300 rounded-lg transition"
-        >
-          <X className="w-6 h-6 text-gray-600 dark:text-gray-300" />
-        </button>
-        <div>
-          <div className="font-bold text-gray-900 dark:text-gray-50">
-            Question {currentQuestionIndex + 1} of {totalQuestions}
-          </div>
-          <div className="text-sm text-gray-600 dark:text-gray-300">
-            {mockQuiz.questions.reduce((acc, q) => acc + q.points, 0)} points total
-          </div>
-        </div>
-      </div>
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import Sidebar from '@/components/layout/Sidebar';
+import SidebarDesk from '@/components/layout/Sidebar/SidebarDesk';
+import HeaderMobile from '@/components/layout/Header/HeaderMobile';
+import {
+  Calendar,
+  Clock,
+  Plus,
+  Bell,
+  Edit2,
+  Trash2,
+  ChevronLeft,
+  ChevronRight,
+  Check,
+  X,
+  BookOpen,
+  AlertCircle,
+  Filter,
+  Search,
+  Repeat,
+  BellRing,
+} from 'lucide-react';
 
-      {mockQuiz.timeLimit && quizState === 'active' && (
-        <div className="flex items-center gap-2 px-4 py-2 bg-purple-100 rounded-lg">
-          <Clock className="w-5 h-5 text-purple-600" />
-          <span className="font-bold text-purple-900">{formatTime(timeRemaining)}</span>
-        </div>
-      )}
-    </div>
+// Types
+interface StudyBoard {
+  id: string;
+  title: string;
+  icon: string;
+  color: string;
+}
 
-    {/* Progress Bar */}
-    <div className="mb-6 max-w-5xl mx-auto">
-      <div className="w-full h-3 bg-gray-200  rounded-full overflow-hidden">
-        <motion.div
-          initial={{ width: 0 }}
-          animate={{ width: `${progress}%` }}
-          className="h-full bg-gradient-to-r from-purple-600 to-blue-600"
-        />
-      </div>
-    </div>
+interface StudySession {
+  id: string;
+  boardId: string;
+  boardTitle: string;
+  boardIcon: string;
+  boardColor: string;
+  date: string;
+  time: string;
+  duration: number;
+  reminder: boolean;
+  reminderTime: number;
+  repeat: 'none' | 'daily' | 'weekly' | 'monthly';
+  notes?: string;
+  completed: boolean;
+}
 
-    {/* Question Card */}
-    <motion.div
-      key={currentQuestion.id}
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      className="bg-white dark:bg-gray-700 rounded-3xl shadow-xl p-6 md:p-8 mb-6"
-    >
-      <div className="flex items-start gap-3 mb-6">
-        <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
-          <span className="font-bold text-purple-600">{currentQuestionIndex + 1}</span>
-        </div>
-        <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-gray-50 flex-1">
-          {currentQuestion.question}
-        </h2>
-      </div>
+// Mock Study Boards
+const mockBoards: StudyBoard[] = [
+  { id: '1', title: 'Cellular Biology', icon: '🧬', color: '#c4b5fd' },
+  { id: '2', title: 'Calculus', icon: '📐', color: '#93c5fd' },
+  { id: '3', title: 'World History', icon: '🏛️', color: '#fca5a5' },
+  { id: '4', title: 'Physics', icon: '⚛️', color: '#a3e635' },
+  { id: '5', title: 'Literature', icon: '📚', color: '#fbbf24' },
+];
 
-      {/* Answer Options */}
-      <div className="space-y-3 mb-6">
-        {currentQuestion.options?.map((option, index) => {
-          const isSelected = selectedAnswer === option;
-          const isThisCorrect = option === currentQuestion.correctAnswer;
-          const showCorrectAnswer = showExplanation && quizState === 'review';
+const StudyPlanner = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [sessions, setSessions] = useState<StudySession[]>([]);
+  const [showNewSessionModal, setShowNewSessionModal] = useState(false);
+  const [editingSession, setEditingSession] = useState<StudySession | null>(null);
+  const [viewMode, setViewMode] = useState<'calendar' | 'list'>('calendar');
+  const [notificationPermission, setNotificationPermission] =
+    useState<NotificationPermission>('default');
 
-          return (
-            <motion.button
-              key={index}
-              whileHover={{ scale: quizState === 'active' && !showExplanation ? 1.02 : 1 }}
-              whileTap={{ scale: quizState === 'active' && !showExplanation ? 0.98 : 1 }}
-              onClick={() => {
-                if (quizState === 'active' && !showExplanation) {
-                  handleSelectAnswer(option);
-                }
-              }}
-              disabled={showExplanation}
-              className={`w-full p-4 md:p-5 rounded-xl border-2 text-left transition flex items-center gap-3 ${
-                showCorrectAnswer && isThisCorrect
-                  ? 'border-green-500 bg-green-50'
-                  : showCorrectAnswer && isSelected && !isThisCorrect
-                    ? 'border-red-500 bg-red-50'
-                    : isSelected
-                      ? 'border-purple-600 bg-purple-50'
-                      : 'border-gray-200 dark:border-gray-400 hover:border-purple-300 hover:bg-purple-50'
-              }`}
-            >
-              <div
-                className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
-                  showCorrectAnswer && isThisCorrect
-                    ? 'border-green-500 bg-green-500'
-                    : showCorrectAnswer && isSelected && !isThisCorrect
-                      ? 'border-red-500 bg-red-500'
-                      : isSelected
-                        ? 'border-purple-600 bg-purple-600'
-                        : 'border-gray-300 '
-                }`}
-              >
-                {showCorrectAnswer && isThisCorrect && (
-                  <CheckCircle2 className="w-4 h-4 text-white" />
-                )}
-                {showCorrectAnswer && isSelected && !isThisCorrect && (
-                  <XCircle className="w-4 h-4 text-white " />
-                )}
-                {isSelected && !showCorrectAnswer && (
-                  <div className="w-3 h-3 rounded-full bg-white" />
-                )}
-              </div>
-              <span className="font-medium text-gray-900 dark:text-gray-50 flex-1">{option}</span>
-            </motion.button>
-          );
-        })}
-      </div>
+  // Form state
+  const [formData, setFormData] = useState({
+    boardId: '',
+    date: '',
+    time: '',
+    duration: 60,
+    reminder: true,
+    reminderTime: 15,
+    repeat: 'none' as 'none' | 'daily' | 'weekly' | 'monthly',
+    notes: '',
+  });
 
-      {/* Explanation */}
-      <AnimatePresence>
-        {showExplanation && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className={`p-4 rounded-xl border-2 ${
-              isCorrect ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'
-            }`}
-          >
-            <div className="flex items-start gap-3">
-              {isCorrect ? (
-                <CheckCircle2 className="w-6 h-6 text-green-600 flex-shrink-0 mt-1" />
-              ) : (
-                <AlertCircle className="w-6 h-6 text-red-600 flex-shrink-0 mt-1" />
-              )}
-              <div className="flex-1">
-                <div className={`font-bold mb-2 ${isCorrect ? 'text-green-900' : 'text-red-900'}`}>
-                  {isCorrect ? 'Correct!' : 'Incorrect'}
+  console.log('heeeeeeeeeeee');
+  // Request notification permission
+  useEffect(() => {
+    console.log('YUOOO');
+    if ('Notification' in window) {
+      setNotificationPermission(Notification.permission);
+      console.log('Notification permission:', Notification.permission);
+      if (Notification.permission === 'default') {
+        Notification.requestPermission().then((permission) => {
+          setNotificationPermission(permission);
+        });
+      }
+    }
+  });
+
+  // Check for upcoming sessions and send notifications
+  useEffect(() => {
+    const checkNotifications = () => {
+      const now = new Date();
+
+      sessions.forEach((session) => {
+        if (!session.completed && session.reminder) {
+          const sessionDateTime = new Date(`${session.date}T${session.time}`);
+          const reminderTime = new Date(sessionDateTime.getTime() - session.reminderTime * 60000);
+
+          // Check if it's time to send reminder
+          if (now >= reminderTime && now < sessionDateTime) {
+            sendNotification(session);
+          }
+        }
+      });
+    };
+
+    const interval = setInterval(checkNotifications, 60000); // Check every minute
+    return () => clearInterval(interval);
+  }, [sessions]);
+
+  const sendNotification = (session: StudySession) => {
+    if (notificationPermission === 'granted') {
+      new Notification('StudyRok Reminder', {
+        body: `Time to study ${session.boardTitle}! Session starts in ${session.reminderTime} minutes.`,
+        icon: session.boardIcon,
+        badge: session.boardIcon,
+        tag: session.id,
+        requireInteraction: true,
+      });
+    }
+  };
+
+  const getDaysInMonth = (date: Date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const daysInMonth = lastDay.getDate();
+    const startingDayOfWeek = firstDay.getDay();
+
+    const days = [];
+
+    // Previous month days
+    for (let i = 0; i < startingDayOfWeek; i++) {
+      days.push(null);
+    }
+
+    // Current month days
+    for (let i = 1; i <= daysInMonth; i++) {
+      days.push(new Date(year, month, i));
+    }
+
+    return days;
+  };
+
+  const getSessionsForDate = (date: Date | null) => {
+    if (!date) return [];
+    const dateStr = date.toISOString().split('T')[0];
+    return sessions.filter((session) => session.date === dateStr);
+  };
+
+  const handlePreviousMonth = () => {
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1));
+  };
+
+  const handleNextMonth = () => {
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1));
+  };
+
+  const handleDateClick = (date: Date) => {
+    setSelectedDate(date);
+  };
+
+  const handleAddSession = () => {
+    setFormData({
+      boardId: '',
+      date: selectedDate.toISOString().split('T')[0],
+      time: '',
+      duration: 60,
+      reminder: true,
+      reminderTime: 15,
+      repeat: 'none',
+      notes: '',
+    });
+    setEditingSession(null);
+    setShowNewSessionModal(true);
+  };
+
+  const handleEditSession = (session: StudySession) => {
+    const board = mockBoards.find((b) => b.id === session.boardId);
+    setFormData({
+      boardId: session.boardId,
+      date: session.date,
+      time: session.time,
+      duration: session.duration,
+      reminder: session.reminder,
+      reminderTime: session.reminderTime,
+      repeat: session.repeat,
+      notes: session.notes || '',
+    });
+    setEditingSession(session);
+    setShowNewSessionModal(true);
+  };
+
+  const handleDeleteSession = (sessionId: string) => {
+    setSessions(sessions.filter((s) => s.id !== sessionId));
+  };
+
+  const handleToggleComplete = (sessionId: string) => {
+    setSessions(sessions.map((s) => (s.id === sessionId ? { ...s, completed: !s.completed } : s)));
+  };
+
+  const handleSaveSession = () => {
+    if (!formData.boardId || !formData.date || !formData.time) {
+      alert('Please fill in all required fields');
+      return;
+    }
+
+    const board = mockBoards.find((b) => b.id === formData.boardId);
+    if (!board) return;
+
+    const sessionData: StudySession = {
+      id: editingSession?.id || `session-${Date.now()}`,
+      boardId: formData.boardId,
+      boardTitle: board.title,
+      boardIcon: board.icon,
+      boardColor: board.color,
+      date: formData.date,
+      time: formData.time,
+      duration: formData.duration,
+      reminder: formData.reminder,
+      reminderTime: formData.reminderTime,
+      repeat: formData.repeat,
+      notes: formData.notes,
+      completed: editingSession?.completed || false,
+    };
+
+    if (editingSession) {
+      setSessions(sessions.map((s) => (s.id === editingSession.id ? sessionData : s)));
+    } else {
+      setSessions([...sessions, sessionData]);
+    }
+
+    setShowNewSessionModal(false);
+    setFormData({
+      boardId: '',
+      date: '',
+      time: '',
+      duration: 60,
+      reminder: true,
+      reminderTime: 15,
+      repeat: 'none',
+      notes: '',
+    });
+  };
+
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  };
+
+  const formatTime = (time: string) => {
+    const [hours, minutes] = time.split(':');
+    const hour = parseInt(hours);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const displayHour = hour % 12 || 12;
+    return `${displayHour}:${minutes} ${ampm}`;
+  };
+
+  const isToday = (date: Date | null) => {
+    if (!date) return false;
+    const today = new Date();
+    return (
+      date.getDate() === today.getDate() &&
+      date.getMonth() === today.getMonth() &&
+      date.getFullYear() === today.getFullYear()
+    );
+  };
+
+  const isSelectedDate = (date: Date | null) => {
+    if (!date) return false;
+    return (
+      date.getDate() === selectedDate.getDate() &&
+      date.getMonth() === selectedDate.getMonth() &&
+      date.getFullYear() === selectedDate.getFullYear()
+    );
+  };
+
+  const days = getDaysInMonth(currentDate);
+  const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const selectedDateSessions = getSessionsForDate(selectedDate);
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex">
+      {/* Sidebar */}
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <SidebarDesk />
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col lg:ml-64 min-h-screen">
+        <HeaderMobile onOpen={() => setSidebarOpen(true)} />
+
+        {/* Page Container */}
+        <div className="flex-1 p-4 lg:p-8 ">
+          <div className="max-w-6xl mx-auto">
+            {/* Header Section */}
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 md:p-7 mb-8">
+              <div className="flex items-center justify-between mb-5">
+                <div>
+                  <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+                    Study Planner
+                  </h1>
+                  <p className="text-gray-600 dark:text-gray-300 mt-1">
+                    Schedule and manage your study sessions
+                  </p>
                 </div>
-                <p className="text-gray-700 dark:text-gray-400">{currentQuestion.explanation}</p>
+
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={handleAddSession}
+                  className="flex items-center gap-2 px-4 md:px-6 py-3 bg-purple-600 hover:bg-purple-700 
+                       text-white rounded-xl font-semibold shadow transition"
+                >
+                  <Plus className="w-5 h-5" />
+                  <span className="hidden md:inline">New Session</span>
+                </motion.button>
+              </div>
+
+              {/* Toggle Buttons */}
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setViewMode('calendar')}
+                  className={`px-4 py-2 rounded-lg font-semibold transition ${
+                    viewMode === 'calendar'
+                      ? 'bg-purple-100 text-purple-700'
+                      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                  }`}
+                >
+                  Calendar
+                </button>
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`px-4 py-2 rounded-lg font-semibold transition ${
+                    viewMode === 'list'
+                      ? 'bg-purple-100 text-purple-700'
+                      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                  }`}
+                >
+                  List
+                </button>
               </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
 
-    {/* Navigation */}
-    <div className="flex items-center justify-between gap-4">
-      <button
-        onClick={handlePreviousQuestion}
-        disabled={currentQuestionIndex === 0}
-        className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-      >
-        <ArrowLeft className="w-5 h-5" />
-        <span className="hidden md:inline">Previous</span>
-      </button>
+            {/* MAIN VIEW */}
+            <main className="space-y-8">
+              {viewMode === 'calendar' ? (
+                /* ────────────── CALENDAR VIEW ────────────── */
+                <div className="grid lg:grid-cols-3 gap-8">
+                  {/* CALENDAR */}
+                  <div className="lg:col-span-2">
+                    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow p-6">
+                      {/* Calendar Header */}
+                      <div className="flex items-center justify-between mb-6">
+                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                          {currentDate.toLocaleDateString('en-US', {
+                            month: 'long',
+                            year: 'numeric',
+                          })}
+                        </h2>
 
-      {!showExplanation && quizState === 'active' ? (
-        <button
-          onClick={handleSubmitAnswer}
-          disabled={!selectedAnswer}
-          className="flex-1 md:flex-none px-8 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          Submit Answer
-        </button>
-      ) : (
-        <button
-          onClick={
-            currentQuestionIndex === totalQuestions - 1 ? handleCompleteQuiz : handleNextQuestion
-          }
-          className="flex-1 md:flex-none px-8 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition flex items-center justify-center gap-2"
-        >
-          <span>{currentQuestionIndex === totalQuestions - 1 ? 'Finish' : 'Next'}</span>
-          {currentQuestionIndex < totalQuestions - 1 && <ArrowRight className="w-5 h-5" />}
-        </button>
-      )}
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={handlePreviousMonth}
+                            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+                          >
+                            <ChevronLeft className="w-5 h-5" />
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              setCurrentDate(new Date());
+                              setSelectedDate(new Date());
+                            }}
+                            className="px-4 py-2 text-sm font-semibold text-purple-600 hover:bg-purple-50 
+                                 dark:text-purple-400 dark:hover:bg-gray-700 rounded-lg"
+                          >
+                            Today
+                          </button>
+
+                          <button
+                            onClick={handleNextMonth}
+                            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+                          >
+                            <ChevronRight className="w-5 h-5" />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Week Days */}
+                      <div className="grid grid-cols-7 gap-2 mb-2">
+                        {weekDays.map((day) => (
+                          <div
+                            key={day}
+                            className="text-center text-sm font-semibold text-gray-600 dark:text-gray-300 py-2"
+                          >
+                            {day}
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Calendar Days */}
+                      <div className="grid grid-cols-7 gap-2">
+                        {days.map((date, index) => {
+                          const sessionsForDay = getSessionsForDate(date);
+
+                          return (
+                            <motion.button
+                              key={index}
+                              whileHover={{ scale: date ? 1.05 : 1 }}
+                              whileTap={{ scale: date ? 0.95 : 1 }}
+                              disabled={!date}
+                              onClick={() => date && handleDateClick(date)}
+                              className={`aspect-square p-2 rounded-xl relative transition ${
+                                !date
+                                  ? 'opacity-0'
+                                  : isToday(date)
+                                    ? 'bg-purple-600 text-white font-bold'
+                                    : isSelectedDate(date)
+                                      ? 'bg-purple-100 text-purple-900 font-bold ring-2 ring-purple-500'
+                                      : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-200'
+                              }`}
+                            >
+                              {date && (
+                                <>
+                                  <span>{date.getDate()}</span>
+
+                                  {/* Dots */}
+                                  {sessionsForDay.length > 0 && (
+                                    <div className="absolute bottom-1 left-1/2 -translate-x-1/2 flex gap-1">
+                                      {sessionsForDay.slice(0, 3).map((s, i) => (
+                                        <span
+                                          key={i}
+                                          className="w-1.5 h-1.5 rounded-full"
+                                          style={{ backgroundColor: s.boardColor }}
+                                        />
+                                      ))}
+                                    </div>
+                                  )}
+                                </>
+                              )}
+                            </motion.button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* RIGHT PANEL */}
+                  <div>
+                    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow p-6">
+                      <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                        {formatDate(selectedDate)}
+                      </h3>
+
+                      {selectedDateSessions.length === 0 ? (
+                        <div className="text-center py-12">
+                          <Calendar className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                          <p className="text-gray-500 dark:text-gray-400 mb-4">
+                            No sessions scheduled
+                          </p>
+                          <button
+                            onClick={handleAddSession}
+                            className="text-purple-600 dark:text-purple-400 font-semibold hover:underline"
+                          >
+                            Add a session
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="space-y-3">
+                          {/* LOOP SESSIONS */}
+                          {selectedDateSessions.map((session) => (
+                            <motion.div
+                              key={session.id}
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              className={`p-4 rounded-xl border-2 ${
+                                session.completed
+                                  ? 'bg-green-50 border-green-200'
+                                  : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700'
+                              }`}
+                            ></motion.div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                /* ────────────── LIST VIEW ────────────── */
+                <div className="bg-white dark:bg-gray-800 rounded-2xl shadow p-6">
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+                    All Sessions
+                  </h2>
+
+                  {/* ... LIST VIEW CONTENT ... */}
+                </div>
+              )}
+            </main>
+
+            {/* MODAL stays the same – only UI tweaks optional */}
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-</div>;
+  );
+};
+
+export default StudyPlanner;

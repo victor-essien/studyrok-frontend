@@ -25,9 +25,14 @@ const flashcardType = [
 
 const FlashcardType = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [selected, setSelected] = useState('');
   const [numFlashcards, setNumFlashcards] = useState(1);
   const [isDisabled, setIsDisabled] = useState(true);
+  const [selected, setSelected] = useState<string>('');
+  const [multipleCount, setMultipleCount] = useState<number>(1);
+  const [definitionCount, setDefinitionCount] = useState<number>(1);
+  const [fillCount, setFillCount] = useState<number>(1);
+
+  // const isSelected = selected === type.id;
 
   // Fix re-render issue
   useEffect(() => {
@@ -53,52 +58,218 @@ const FlashcardType = () => {
           </p>
 
           {/* Flashcard Type Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
-            {flashcardType.map((type) => {
-              const isSelected = selected === type.id;
-
-              return (
-                <motion.div
-                  key={type.id}
-                  whileHover={{ y: -3 }}
-                  onClick={() => setSelected(type.id)}
-                  className={`
-                    flex flex-col gap-4 p-4 rounded-xl border cursor-pointer transition
+          <div className="grid grid-cols-1 sm:grid-cols-2 px-0 md:px-4 lg:grid-cols-1 gap-4 mt-6">
+            <motion.div
+              whileHover={{ y: -3 }}
+              onClick={() => setSelected('terms_definition')}
+              className={`
+                    flex flex-col gap-4 p-4 rounded-xl border-2 cursor-pointer transition
                     bg-white dark:bg-gray-800
                     ${
-                      isSelected
-                        ? 'border-purple-600 shadow-lg shadow-purple-300/20 dark:shadow-purple-900/20'
+                      selected === 'terms_definition'
+                        ? 'border-purple-600 '
                         : 'border-gray-200 dark:border-gray-700'
                     }
                     hover:bg-gray-100 dark:hover:bg-gray-700
                   `}
-                >
-                  {/* Icon + Label */}
-                  <div className="flex items-center gap-3">
-                    <span className="text-gray-900 dark:text-gray-200">{type.icon}</span>
-                    <p className="font-semibold text-gray-900 dark:text-white text-sm">
-                      {type.label}
-                    </p>
-                  </div>
+            >
+              {/* Icon + Label */}
+              <div className="flex items-center gap-3">
+                <span className="text-gray-900 dark:text-gray-200">
+                  <CreditCard className="w-5 h-5" />
+                </span>
+                <p className="font-semibold text-gray-900 dark:text-white text-sm">
+                  Terms & Definition
+                </p>
+              </div>
 
-                  {/* Number Input */}
-                  <input
-                    type="number"
-                    min="1"
-                    max="20"
-                    value={numFlashcards}
-                    onChange={(e) => setNumFlashcards(Number(e.target.value))}
-                    className="
-                      w-full px-3 py-2 rounded-lg border
-                      border-gray-300 dark:border-gray-600
-                      bg-white dark:bg-gray-800 
-                      text-gray-900 dark:text-gray-100
-                      focus:ring-2 focus:ring-purple-500 focus:border-transparent
-                    "
-                  />
-                </motion.div>
-              );
-            })}
+              {/* Number Input */}
+              <div className="relative flex items-center w-full">
+                {/* Decrement Button */}
+                <button
+                  type="button"
+                  onClick={() => setDefinitionCount((prev) => Math.max(1, prev - 1))}
+                  className="
+      absolute left-2 z-10 px-2 py-1 rounded-md
+      text-gray-600 dark:text-gray-300
+      hover:bg-gray-200 dark:hover:bg-gray-700
+    "
+                >
+                  −
+                </button>
+
+                {/* Number Input */}
+                <input
+                  type="number"
+                  min="1"
+                  max="20"
+                  value={definitionCount}
+                  onChange={(e) => setDefinitionCount(Number(e.target.value))}
+                  className="
+      w-full text-center px-10 py-2 rounded-lg border
+      border-gray-300 dark:border-gray-600
+      bg-white dark:bg-gray-800
+      text-gray-900 dark:text-gray-100
+      focus:ring-2 focus:ring-purple-500 focus:border-transparent
+      appearance-none
+    "
+                />
+
+                {/* Increment Button */}
+                <button
+                  type="button"
+                  onClick={() => setDefinitionCount((prev) => Math.min(20, prev + 1))}
+                  className="
+      absolute right-2 z-10 px-2 py-1 rounded-md
+      text-gray-600 dark:text-gray-300
+      hover:bg-gray-200 dark:hover:bg-gray-700
+    "
+                >
+                  +
+                </button>
+              </div>
+            </motion.div>
+
+            <motion.div
+              whileHover={{ y: -3 }}
+              onClick={() => setSelected('multiple_choice')}
+              className={`
+                    flex flex-col gap-4 p-4 rounded-xl border-2 cursor-pointer transition
+                    bg-white dark:bg-gray-800
+                    ${
+                      selected === 'multiple_choice'
+                        ? 'border-purple-600 '
+                        : 'border-gray-200 dark:border-gray-700'
+                    }
+                    hover:bg-gray-100 dark:hover:bg-gray-700
+                  `}
+            >
+              {/* Icon + Label */}
+              <div className="flex items-center gap-3">
+                <span className="text-gray-900 dark:text-gray-200">
+                  <ListChecks className="w-5 h-5" />
+                </span>
+                <p className="font-semibold text-gray-900 dark:text-white text-sm">
+                  Multiple Choice
+                </p>
+              </div>
+
+              {/* Number Input */}
+              <div className="relative flex items-center w-full">
+                {/* Decrement Button */}
+                <button
+                  type="button"
+                  onClick={() => setMultipleCount((prev) => Math.max(1, prev - 1))}
+                  className="
+      absolute left-2 z-10 px-2 py-1 rounded-md
+      text-gray-600 dark:text-gray-300
+      hover:bg-gray-200 dark:hover:bg-gray-700
+    "
+                >
+                  −
+                </button>
+
+                {/* Number Input */}
+                <input
+                  type="number"
+                  min="1"
+                  max="20"
+                  value={multipleCount}
+                  onChange={(e) => setMultipleCount(Number(e.target.value))}
+                  className="
+      w-full text-center px-10 py-2 rounded-lg border
+      border-gray-300 dark:border-gray-600
+      bg-white dark:bg-gray-800
+      text-gray-900 dark:text-gray-100
+      focus:ring-2 focus:ring-purple-500 focus:border-transparent
+      appearance-none
+    "
+                />
+
+                {/* Increment Button */}
+                <button
+                  type="button"
+                  onClick={() => setMultipleCount((prev) => Math.min(20, prev + 1))}
+                  className="
+      absolute right-2 z-10 px-2 py-1 rounded-md
+      text-gray-600 dark:text-gray-300
+      hover:bg-gray-200 dark:hover:bg-gray-700
+    "
+                >
+                  +
+                </button>
+              </div>
+            </motion.div>
+            <motion.div
+              whileHover={{ y: -3 }}
+              onClick={() => setSelected('fill_blank')}
+              className={`
+                    flex flex-col gap-4 p-4 rounded-xl  border-2 cursor-pointer transition
+                    bg-white dark:bg-gray-800
+                    ${
+                      selected === 'fill_blank'
+                        ? 'border-purple-600 '
+                        : 'border-gray-200 dark:border-gray-700'
+                    }
+                    hover:bg-gray-100 dark:hover:bg-gray-700
+                  `}
+            >
+              {/* Icon + Label */}
+              <div className="flex items-center gap-3">
+                <span className="text-gray-900 dark:text-gray-200">
+                  <Equal className="w-5 h-5" />
+                </span>
+                <p className="font-semibold text-gray-900 dark:text-white text-sm">
+                  Fill in the Blank
+                </p>
+              </div>
+
+              {/* Number Input */}
+              <div className="relative flex items-center w-full">
+                {/* Decrement Button */}
+                <button
+                  type="button"
+                  onClick={() => setFillCount((prev) => Math.max(1, prev - 1))}
+                  className="
+      absolute left-2 z-10 px-2 py-1 rounded-md
+      text-gray-600 dark:text-gray-300
+      hover:bg-gray-200 dark:hover:bg-gray-700
+    "
+                >
+                  −
+                </button>
+
+                {/* Number Input */}
+                <input
+                  type="number"
+                  min="1"
+                  max="20"
+                  value={fillCount}
+                  onChange={(e) => setFillCount(Number(e.target.value))}
+                  className="
+      w-full text-center px-10 py-2 rounded-lg border
+      border-gray-300 dark:border-gray-600
+      bg-white dark:bg-gray-800
+      text-gray-900 dark:text-gray-100
+      focus:ring-2 focus:ring-purple-500 focus:border-transparent
+      appearance-none
+    "
+                />
+
+                {/* Increment Button */}
+                <button
+                  type="button"
+                  onClick={() => setFillCount((prev) => Math.min(20, prev + 1))}
+                  className="
+      absolute right-2 z-10 px-2 py-1 rounded-md
+      text-gray-600 dark:text-gray-300
+      hover:bg-gray-200 dark:hover:bg-gray-700
+    "
+                >
+                  +
+                </button>
+              </div>
+            </motion.div>
           </div>
 
           {/* Buttons */}
