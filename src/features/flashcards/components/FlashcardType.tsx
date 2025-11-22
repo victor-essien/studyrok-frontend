@@ -4,6 +4,8 @@ import SidebarDesk from '@/components/layout/Sidebar/SidebarDesk';
 import HeaderMobile from '@/components/layout/Header/HeaderMobile';
 import { motion } from 'framer-motion';
 import { CreditCard, ListChecks, Equal } from 'lucide-react';
+import { useOutletContext, useNavigate } from 'react-router-dom';
+import type { FlashcardContextType } from '@/types';
 
 const flashcardType = [
   {
@@ -31,8 +33,13 @@ const FlashcardType = () => {
   const [multipleCount, setMultipleCount] = useState<number>(1);
   const [definitionCount, setDefinitionCount] = useState<number>(1);
   const [fillCount, setFillCount] = useState<number>(1);
+  const { formData, setFormData } = useOutletContext<FlashcardContextType>();
+  const navigate = useNavigate();
 
-  // const isSelected = selected === type.id;
+  const handleSelect = (value: string) => {
+    setSelected(value);
+    setFormData((p: any) => ({ ...p, type: value }));
+  };
 
   // Fix re-render issue
   useEffect(() => {
@@ -61,7 +68,7 @@ const FlashcardType = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 px-0 md:px-4 lg:grid-cols-1 gap-4 mt-6">
             <motion.div
               whileHover={{ y: -3 }}
-              onClick={() => setSelected('terms_definition')}
+              onClick={() => handleSelect('terms_definition')}
               className={`
                     flex flex-col gap-4 p-4 rounded-xl border-2 cursor-pointer transition
                     bg-white dark:bg-gray-800
@@ -132,7 +139,7 @@ const FlashcardType = () => {
 
             <motion.div
               whileHover={{ y: -3 }}
-              onClick={() => setSelected('multiple_choice')}
+              onClick={() => handleSelect('multiple_choice')}
               className={`
                     flex flex-col gap-4 p-4 rounded-xl border-2 cursor-pointer transition
                     bg-white dark:bg-gray-800
@@ -202,7 +209,7 @@ const FlashcardType = () => {
             </motion.div>
             <motion.div
               whileHover={{ y: -3 }}
-              onClick={() => setSelected('fill_blank')}
+              onClick={() => handleSelect('fill_blank')}
               className={`
                     flex flex-col gap-4 p-4 rounded-xl  border-2 cursor-pointer transition
                     bg-white dark:bg-gray-800
@@ -287,6 +294,7 @@ const FlashcardType = () => {
 
             <button
               disabled={isDisabled}
+              onClick={() => navigate('/flashcards/create/material')}
               className={`
                 flex-1 py-3 rounded-xl text-white transition
                 ${

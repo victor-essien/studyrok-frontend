@@ -2,17 +2,21 @@ import React, { useState, useEffect } from 'react';
 import Sidebar from '@/components/layout/Sidebar';
 import SidebarDesk from '@/components/layout/Sidebar/SidebarDesk';
 import HeaderMobile from '@/components/layout/Header/HeaderMobile';
+import { useOutletContext, useNavigate } from 'react-router-dom';
 import { Clock } from 'lucide-react';
+import type { FlashcardContextType } from '@/types';
 
 const CreateFlashcard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [name, setName] = useState('');
   const [isDisabled, setIsDisabled] = useState(true);
+  const { formData, setFormData } = useOutletContext<FlashcardContextType>();
+  const navigate = useNavigate();
 
   // Prevent re-render loops
   useEffect(() => {
-    setIsDisabled(name.trim().length === 0);
-  }, [name]);
+    setIsDisabled(formData.name.trim().length === 0);
+  }, [formData.name]);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex">
@@ -43,9 +47,13 @@ const CreateFlashcard = () => {
               </label>
               <input
                 type="text"
-                name="setName"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                name="name"
+                value={formData.name}
+                onChange={(e) => setFormData((prev: any) => ({ ...prev, name: e.target.value }))}
+                //  type="text"
+                // name="name"
+                // value={name}
+                // onChange={(e) => setName(e.target.value)}
                 required
                 className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 
                 text-gray-900 dark:text-gray-200 focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none"
@@ -80,6 +88,7 @@ const CreateFlashcard = () => {
 
               <button
                 disabled={isDisabled}
+                onClick={() => navigate('type')}
                 className={`flex-1 rounded-xl py-3 text-white transition 
                   ${
                     isDisabled

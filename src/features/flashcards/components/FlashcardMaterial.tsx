@@ -3,30 +3,43 @@ import Sidebar from '@/components/layout/Sidebar';
 import SidebarDesk from '@/components/layout/Sidebar/SidebarDesk';
 import HeaderMobile from '@/components/layout/Header/HeaderMobile';
 import { motion } from 'framer-motion';
+import { useOutletContext, useNavigate } from 'react-router-dom';
+import type { FlashcardContextType } from '@/types';
 
 const mockStudyBoard = {
   id: 'board-1',
   title: 'Comp',
   icon: '🧬',
   materials: [
-    { id: 1, title: 'Cell Fate and Development', date: 'OCT 31 2025', icon: '📄' },
-    { id: 2, title: 'Band theory of solids', date: 'OCT 31 2025', icon: '📄' },
-    { id: 3, title: 'Semiconductors Fundamental', date: 'OCT 31 2025', icon: '📄' },
-    { id: 4, title: 'Cell Theory', date: 'OCT 31 2025', icon: '📄' },
-    { id: 5, title: 'Solids and Liquid', date: 'OCT 31 2025', icon: '📄' },
-    { id: 6, title: 'Conductors and diodes', date: 'OCT 31 2025', icon: '📄' },
+    { id: '1', title: 'Cell Fate and Development', date: 'OCT 31 2025', icon: '📄' },
+    { id: '2', title: 'Band theory of solids', date: 'OCT 31 2025', icon: '📄' },
+    { id: '3', title: 'Semiconductors Fundamental', date: 'OCT 31 2025', icon: '📄' },
+    { id: '4', title: 'Cell Theory', date: 'OCT 31 2025', icon: '📄' },
+    { id: '5', title: 'Solids and Liquid', date: 'OCT 31 2025', icon: '📄' },
+    { id: '6', title: 'Conductors and diodes', date: 'OCT 31 2025', icon: '📄' },
   ],
 };
 
-const MaterialPage = () => {
+const FlashcardMaterial = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isDisabled, setIsDisabled] = useState(true);
-
-  const toggleSelect = (id: number) => {
+  const { formData, setFormData } = useOutletContext<FlashcardContextType>();
+  const navigate = useNavigate();
+  const toggleSelect = (id: string) => {
     setSelectedIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+    setFormData((p) => ({
+      ...p,
+      materials: p.materials.includes(id)
+        ? p.materials.filter((m: any) => m !== id)
+        : [...p.materials, id],
+    }));
   };
 
+  const submit = () => {
+    alert('Flashcard set Creating...');
+    console.log('Final request:', formData);
+  };
   // Prevent rerender loops
   useEffect(() => {
     setIsDisabled(selectedIds.length === 0);
@@ -110,6 +123,7 @@ const MaterialPage = () => {
 
             <button
               disabled={isDisabled}
+              onClick={submit}
               className={`flex-1 rounded-xl py-3 text-white transition
                 ${
                   isDisabled
@@ -127,4 +141,4 @@ const MaterialPage = () => {
   );
 };
 
-export default MaterialPage;
+export default FlashcardMaterial;

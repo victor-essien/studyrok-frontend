@@ -3,18 +3,20 @@ import Sidebar from '@/components/layout/Sidebar';
 import SidebarDesk from '@/components/layout/Sidebar/SidebarDesk';
 import HeaderMobile from '@/components/layout/Header/HeaderMobile';
 import { Clock } from 'lucide-react';
-
+import { useOutletContext, useNavigate } from 'react-router-dom';
+import type { QuizContextType } from '@/types';
 const CreateQuizPage = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [name, setName] = useState('');
   const [questionCount, setQuestionCount] = useState(10);
   const [timer, setTimer] = useState(5);
   const [isDisabled, setIsDisabled] = useState(true);
-
+  const { formData, setFormData } = useOutletContext<QuizContextType>();
+  const navigate = useNavigate();
   // Prevent re-render loops
   useEffect(() => {
-    setIsDisabled(name.trim().length === 0);
-  }, [name]);
+    setIsDisabled(formData.name.trim().length === 0);
+  }, [formData.name]);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex">
@@ -46,9 +48,10 @@ const CreateQuizPage = () => {
               </label>
               <input
                 type="text"
-                name="setName"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                name="name"
+                value={formData.name}
+                // onChange={(e) => setName(e.target.value)}
+                onChange={(e) => setFormData((prev: any) => ({ ...prev, name: e.target.value }))}
                 required
                 className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 
               bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-200 
@@ -57,39 +60,89 @@ const CreateQuizPage = () => {
             </div>
 
             {/* Number of Questions */}
+            {/* Number of questions */}
             <div className="flex flex-col">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Number of questions
               </label>
+
               <input
                 type="number"
-                name="questionCount"
-                value={questionCount}
-                min={1}
-                onChange={(e) => setQuestionCount(Number(e.target.value))}
+                name="questionNo"
+                value={formData.questionNo}
+                min={0} // you decide the minimum
+                // onChange={(e) => {
+                //   const value = e.target.value;
+
+                //   // If user deletes everything → keep it at 0
+                //   if (value === "") {
+                //     setQuestionCount(0);
+                //     return;
+                //   }
+
+                //   setQuestionCount(Number(value));
+                // }}
+                onChange={(e) => {
+                  setFormData((prev: any) => ({ ...prev, questionNo: e.target.value }));
+                }}
+                //
                 required
                 className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 
-              bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-200 
-              focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none"
+      bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-200 
+      focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none"
               />
             </div>
 
-            {/* Timer in Minutes */}
+            {/* Timer with + / - */}
             <div className="flex flex-col">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Timer (minutes)
               </label>
-              <input
-                type="number"
-                name="timer"
-                value={timer}
-                min={1}
-                onChange={(e) => setTimer(Number(e.target.value))}
-                required
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 
-              bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-200 
-              focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none"
-              />
+
+              <div className="flex items-center gap-2">
+                {/* - button */}
+                <button
+                  type="button"
+                  onClick={() =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      timer: Math.max(1, prev.timer - 5),
+                    }))
+                  }
+                  className="px-3 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 
+        text-gray-800 dark:text-gray-200 font-bold text-lg"
+                >
+                  -
+                </button>
+
+                {/* Number input */}
+                <input
+                  type="number"
+                  name="timer"
+                  value={formData.timer}
+                  min={1}
+                  onChange={(e) => setFormData((prev: any) => ({ ...prev, timer: e.target.value }))}
+                  required
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 
+        bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-200 
+        focus:ring-2 focus:ring-purple-600 focus:border-transparent outline-none text-center"
+                />
+
+                {/* + button */}
+                <button
+                  type="button"
+                  onClick={() =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      timer: prev.timer + 5,
+                    }))
+                  }
+                  className="px-3 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 
+        text-gray-800 dark:text-gray-200 font-bold text-lg"
+                >
+                  +
+                </button>
+              </div>
             </div>
 
             {/* Create from Material */}
@@ -100,7 +153,7 @@ const CreateQuizPage = () => {
               <div>
                 <p className="font-medium text-gray-900 dark:text-white">Create from material</p>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                  Generate your flashcard set from your current study material
+                  Generate your quiz from your current study material
                 </p>
               </div>
 
@@ -120,6 +173,7 @@ const CreateQuizPage = () => {
 
               <button
                 disabled={isDisabled}
+                onClick={() => navigate('material')}
                 className={`flex-1 rounded-xl py-3 text-white transition 
               ${isDisabled ? 'bg-purple-400 cursor-not-allowed' : 'bg-purple-600 hover:bg-purple-700'}`}
               >

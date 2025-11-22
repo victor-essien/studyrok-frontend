@@ -65,3 +65,20 @@ export interface QuizResult {
   passed: boolean;
   questions: QuizQuestion[];
 }
+
+export interface QuizContextType {
+  formData: {
+    name: string;
+    questionNo: number;
+    timer: number;
+    materials: string[];
+  };
+  setFormData: React.Dispatch<
+    React.SetStateAction<{
+      name: string;
+      questionNo: number;
+      timer: number;
+      materials: string[];
+    }>
+  >;
+}

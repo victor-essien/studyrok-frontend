@@ -51,3 +51,18 @@ export interface FlashcardReviewSession {
   startedAt: string;
   completedAt?: string;
 }
+
+export interface FlashcardContextType {
+  formData: {
+    name: string;
+    type: string;
+    materials: string[];
+  };
+  setFormData: React.Dispatch<
+    React.SetStateAction<{
+      name: string;
+      type: string;
+      materials: string[];
+    }>
+  >;
+}

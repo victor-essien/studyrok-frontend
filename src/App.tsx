@@ -11,15 +11,17 @@ import { ThemeModal } from './components/ThemeModal';
 import ReadingNotesPage from './features/notes/components/ReadingNotesPage';
 import { useEffect } from 'react';
 import FlashcardPage from './pages/FlashcardPage';
-import FlashcardType from './features/flashcards/components/FlashcardType';
-import CreateFlashcard from './features/flashcards/components/CreateFlashcard';
-import MaterialPage from './features/flashcards/components/MaterialPage';
+import MainRoutes from './routes';
 import RokQuizPage from './features/quizzes/components/RokquizPage';
+import CreateQuizPage from './features/quizzes/components/CreateQuizPage';
+import MaterialPage from './features/quizzes/components/ChooseMaterial';
 import StudyPlanner from './features/planner/components/PlannerPage';
 import StudySessionPage from './features/session/components/SessionPage';
 import StudySession from './features/session/components/StudySession';
 import DocumentViewer from './features/session/components/DocumentViewer';
 import FlashCard from './features/flashcards/components/FlashCard';
+import FlashcardMaterial from './features/flashcards/components/FlashcardMaterial';
+import { PrivateRoutes } from './routes/private';
 function App() {
   const theme = useStore((state) => state.theme);
 
@@ -56,6 +58,14 @@ function App() {
   return (
     <>
       <Routes>
+        <Route
+          path="/*"
+          element={
+            <PrivateRoutes>
+              <MainRoutes />
+            </PrivateRoutes>
+          }
+        />
         <Route path="/" element={<LandingPage />} />
         <Route path="/welcome" element={<WelcomeScreen />} />
         <Route path="/signup" element={<AuthForm />} />
@@ -64,11 +74,10 @@ function App() {
         <Route path="/space" element={<Dashboard />} />
         <Route path="/space/studyboard" element={<StudyBoardDetailPage />} />
         <Route path="/space/notes" element={<ReadingNotesPage />} />
-        <Route path="/flashcard" element={<FlashcardPage />} />
-        <Route path="/flashcard/material" element={<MaterialPage />} />
-        <Route path="/flashcard/type" element={<FlashcardType />} />
-        <Route path="/flashcard/create" element={<CreateFlashcard />} />
+        <Route path="/flashcards" element={<FlashcardPage />} />
         <Route path="/rokquiz" element={<RokQuizPage />} />
+        {/* <Route path="/rokquiz/create" element={<CreateQuizPage />} />
+        <Route path="/rokquiz/material" element={<MaterialPage />} /> */}
         <Route path="/planner" element={<StudyPlanner />} />
         <Route path="/session" element={<StudySessionPage />} />
         <Route path="/test" element={<StudySession />} />

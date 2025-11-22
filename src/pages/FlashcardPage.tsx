@@ -3,6 +3,7 @@ import Sidebar from '@/components/layout/Sidebar';
 import SidebarDesk from '@/components/layout/Sidebar/SidebarDesk';
 import Header from '@/components/layout/Header/Header';
 import { BookOpen, Plus, ChevronLeft, ChevronRight, RotateCcw, X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 type flashcard = {
   id: number;
@@ -35,7 +36,7 @@ const mockStudyBoard = {
   ],
   completionPercentage: 0,
 };
-
+const flashcard: flashcard[] = [];
 const flashcardss: flashcard[] = [
   {
     id: 1,
@@ -153,6 +154,7 @@ const FlashcardPage = () => {
   // }, [activeStudyboard]);
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-800 flex">
@@ -187,7 +189,7 @@ const FlashcardPage = () => {
               <span className="font-semibold">Add new Set</span>
             </motion.button>
           </div>
-          {flashcardss.length === 0 ? (
+          {flashcard.length === 0 ? (
             // Empty State
             <div className="bg-white  dark:bg-gray-700 rounded-2xl  shadow-lg p-12 text-center">
               <div className="bg-purple-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -200,7 +202,7 @@ const FlashcardPage = () => {
                 Create your first set of flashcards from your notes to start studying
               </p>
               <button
-                // onClick={() => setShowCreateModal(true)}
+                onClick={() => navigate('/flashcards/create')}
                 className="bg-purple-600  text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition inline-flex items-center gap-2 font-medium"
               >
                 <Plus className="w-5 h-5" />
