@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { LOGO } from '@/assets';
+import { NavLink } from 'react-router-dom';
 import {
   Home,
   Clock,
@@ -64,23 +65,114 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
         {/* Navigation */}
         <nav className="flex-1 overflow-y-auto px-3 pt-2">
           <div className="space-y-1">
-            {sidebarItems.map((item, index) => (
-              <button
-                key={index}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
-                  item.active
+            {/* Home */}
+            <NavLink
+              to="/dashboard"
+              className={({ isActive }) =>
+                `w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
+                  isActive
                     ? 'bg-purple-100 text-purple-600'
                     : 'text-gray-700 dark:text-gray-100 dark:hover:bg-gray-700 hover:bg-gray-100'
-                }`}
-              >
-                <item.icon className="w-5 h-5" style={{ color: item.color }} />
+                }`
+              }
+            >
+              <Home className="w-5 h-5" style={{ color: '#fb923c' }} />
+              <span className="text-sm font-medium">Dashboard</span>
+            </NavLink>
 
-                <span className="text-sm font-medium">{item.label}</span>
-              </button>
-            ))}
+            {/* My Boards */}
+            <NavLink
+              to="/boards"
+              className={({ isActive }) =>
+                `w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
+                  isActive
+                    ? 'bg-purple-100 text-purple-600'
+                    : 'text-gray-700 dark:text-gray-100 dark:hover:bg-gray-700 hover:bg-gray-100'
+                }`
+              }
+            >
+              <GalleryVerticalEnd className="w-5 h-5" style={{ color: '#42C696' }} />
+              <span className="text-sm font-medium">My Boards</span>
+            </NavLink>
+
+            {/* My Sessions */}
+            <NavLink
+              to="/session"
+              className={({ isActive }) =>
+                `w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
+                  isActive
+                    ? 'bg-purple-100 text-purple-600'
+                    : 'text-gray-700 dark:text-gray-100 dark:hover:bg-gray-700 hover:bg-gray-100'
+                }`
+              }
+            >
+              <Clock className="w-5 h-5" style={{ color: '#689BF4' }} />
+              <span className="text-sm font-medium">My Sessions</span>
+            </NavLink>
+
+            {/* Planner */}
+            <NavLink
+              to="/planner"
+              className={({ isActive }) =>
+                `w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
+                  isActive
+                    ? 'bg-purple-100 text-purple-600'
+                    : 'text-gray-700 dark:text-gray-100 dark:hover:bg-gray-700 hover:bg-gray-100'
+                }`
+              }
+            >
+              <Calendar className="w-5 h-5" style={{ color: '#8D7EEC' }} />
+              <span className="text-sm font-medium">Planner</span>
+            </NavLink>
+
+            {/* Flashcards */}
+            <NavLink
+              to="/flashcards"
+              className={({ isActive }) =>
+                `w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
+                  isActive
+                    ? 'bg-purple-100 text-purple-600'
+                    : 'text-gray-700 dark:text-gray-100 dark:hover:bg-gray-700 hover:bg-gray-100'
+                }`
+              }
+            >
+              <CreditCard className="w-5 h-5" style={{ color: '#60A0F7' }} />
+              <span className="text-sm font-medium">Flashcards</span>
+            </NavLink>
+
+            {/* RokQuiz */}
+            <NavLink
+              to="/rokquiz"
+              className={({ isActive }) =>
+                `w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
+                  isActive
+                    ? 'bg-purple-100 text-purple-600'
+                    : 'text-gray-700 dark:text-gray-100 dark:hover:bg-gray-700 hover:bg-gray-100'
+                }`
+              }
+            >
+              <Edit3 className="w-5 h-5" style={{ color: '#8022B6' }} />
+              <span className="text-sm font-medium">RokQuiz</span>
+            </NavLink>
+
+            {/* Notes & Materials */}
+            <NavLink
+              to="/materials"
+              className={({ isActive }) =>
+                `w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
+                  isActive
+                    ? 'bg-purple-100 text-purple-600'
+                    : 'text-gray-700 dark:text-gray-100 dark:hover:bg-gray-700 hover:bg-gray-100'
+                }`
+              }
+            >
+              <FileText className="w-5 h-5" />
+              <span className="text-sm font-medium">Notes & Materials</span>
+            </NavLink>
           </div>
+
           {/* Upload Button */}
-          <div className="p-4 border-t mt-16  border-gray-200 dark:border-gray-700">
+          <div className="p-4 border-t mt-16 border-gray-200 dark:border-gray-700">
             <button className="w-full flex items-center justify-center gap-2 py-3 bg-purple-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition">
               <Upload className="w-5 h-5" />
               Upload

@@ -7,17 +7,22 @@ import QuizLayout from '@/features/quizzes/components/QuizLayout';
 import CreateQuizPage from '@/features/quizzes/components/CreateQuizPage';
 import MaterialPage from '@/features/quizzes/components/ChooseMaterial';
 import QuizInfo from '@/features/quizzes/components/QuizInfo';
+import QuizPage from '@/pages/QuizPage';
+import FlashcardPage from '@/pages/FlashcardPage';
 
 function MainRoutes() {
   return (
     <>
       <Routes>
+        {/* Flashcard Route */}
+        <Route path="/flashcards" element={<FlashcardPage />} />
         <Route path="flashcards/create" element={<FlashcardLayout />}>
           <Route index element={<CreateFlashcard />} />
           <Route path="type" element={<FlashcardType />} />
           <Route path="material" element={<FlashcardMaterial />} />
         </Route>
         {/* Quiz Route */}
+        <Route path="rokquiz" element={<QuizPage />} />
         <Route path="rokquiz/create" element={<QuizLayout />}>
           <Route index element={<CreateQuizPage />} />
           <Route path="material" element={<MaterialPage />} />

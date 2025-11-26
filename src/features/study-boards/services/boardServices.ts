@@ -5,9 +5,26 @@ import type { StudyBoard, CreateBoardPayload, BoardProgress, PaginatedResponse }
 export const boardService = {
   // Get all boards
   async getBoards(page = 1, limit = 10): Promise<PaginatedResponse<StudyBoard>> {
-    return apiClient.get(ENDPOINTS.boards.list, {
-      params: { page, limit },
-    });
+    try {
+      const response = await apiClient.get<PaginatedResponse<StudyBoard>>(
+        `${ENDPOINTS.boards.list}?page=${page}&limit=${limit}`
+      );
+      return response;
+    } catch (error) {
+      console.error('Error fetching boards:', error);
+      // Return empty data structure instead of throwing
+      return {
+        data: [],
+        pagination: {
+          page,
+          limit,
+          total: 0,
+          totalPages: 0,
+          hasNext: false,
+          hasPrev: false,
+        },
+      };
+    }
   },
   // Get board by ID
   async getBoardById(id: string): Promise<StudyBoard> {

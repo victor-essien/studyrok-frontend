@@ -35,6 +35,50 @@ server.use((req, res, next) => {
 server.use(jsonServer.bodyParser);
 
 // Custom AUTH Endpoints
+// mock-server/server.cjs
+// Add this middleware BEFORE the rewriter
+server.use((req, res, next) => {
+  // Intercept JSON Server responses and wrap them
+  const originalJson = res.json;
+
+  res.json = function (data) {
+    // Check if it's a GET request for lists
+    if (req.method === 'GET' && Array.isArray(data)) {
+      // Wrap array responses in pagination structure
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+      const total = data.length;
+
+      const wrappedData = {
+        success: true,
+        data: data,
+        pagination: {
+          page,
+          limit,
+          total,
+          totalPages: Math.ceil(total / limit),
+          hasNext: page * limit < total,
+          hasPrev: page > 1,
+        },
+      };
+
+      return originalJson.call(this, wrappedData);
+    }
+
+    // For single items or other responses
+    if (req.method === 'GET' && !Array.isArray(data)) {
+      return originalJson.call(this, {
+        success: true,
+        data: data,
+      });
+    }
+
+    // Pass through other responses
+    return originalJson.call(this, data);
+  };
+
+  next();
+});
 
 //SIGNUP
 server.post('/api/auth/signup', (req, res) => {

@@ -11,8 +11,12 @@ import { ThemeModal } from './components/ThemeModal';
 import ReadingNotesPage from './features/notes/components/ReadingNotesPage';
 import { useEffect } from 'react';
 import FlashcardPage from './pages/FlashcardPage';
+import Dashboardd from './pages/Dashboardd';
+// import { StudyBoard } from './pages/StudyBoard';
+import StudyBoards from './pages/StudyBoard';
 import MainRoutes from './routes';
-import RokQuizPage from './features/quizzes/components/RokquizPage';
+// import RokQuizPage from './features/quizzes/components/RokquizPage';
+
 import CreateQuizPage from './features/quizzes/components/CreateQuizPage';
 import MaterialPage from './features/quizzes/components/ChooseMaterial';
 import StudyPlanner from './features/planner/components/PlannerPage';
@@ -72,15 +76,16 @@ function App() {
         <Route path="/login" element={<LoginForm />} />
         <Route path="/onboarding" element={<Onboarding />} />
         <Route path="/space" element={<Dashboard />} />
+        <Route path="/dashboard" element={<Dashboardd />} />
+        <Route path="/boards" element={<StudyBoards />} />
         <Route path="/space/studyboard" element={<StudyBoardDetailPage />} />
         <Route path="/space/notes" element={<ReadingNotesPage />} />
-        <Route path="/flashcards" element={<FlashcardPage />} />
-        <Route path="/rokquiz" element={<RokQuizPage />} />
+        {/* <Route path="/rokquiz" element={<RokQuizPage />} /> */}
         {/* <Route path="/rokquiz/create" element={<CreateQuizPage />} />
         <Route path="/rokquiz/material" element={<MaterialPage />} /> */}
         <Route path="/planner" element={<StudyPlanner />} />
-        <Route path="/session" element={<StudySessionPage />} />
-        <Route path="/test" element={<StudySession />} />
+        {/* <Route path="/session" element={<StudySessionPage />} /> */}
+        <Route path="/session" element={<StudySession />} />
         <Route path="/document-viewer" element={<DocumentViewer />} />
         <Route path="/flash-card" element={<FlashCard />} />
       </Routes>

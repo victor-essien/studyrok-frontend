@@ -8,7 +8,22 @@ import toast from 'react-hot-toast';
 export const useBoards = (page = 1, limit = 10) => {
   return useQuery({
     queryKey: queryKeys.boards.list({ page, limit }),
-    queryFn: () => boardService.getBoards(page, limit),
+    queryFn: async () => {
+      const result = await boardService.getBoards(page, limit);
+      return result;
+    },
+    // Ensure we always return data
+    placeholderData: {
+      data: [],
+      pagination: {
+        page,
+        limit,
+        total: 0,
+        totalPages: 0,
+        hasNext: false,
+        hasPrev: false,
+      },
+    },
   });
 };
 

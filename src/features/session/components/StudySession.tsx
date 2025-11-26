@@ -63,7 +63,7 @@ const StudySession = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className=" rounded-3xl p-2  shadow-lg"
               >
-                <div className="flex items-center gap-4  mb-6">
+                {/* <div className="flex items-center gap-4  mb-6">
                   <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl flex items-center justify-center">
                     <BookOpen className="w-8 h-8 text-white" />
                   </div>
@@ -71,9 +71,9 @@ const StudySession = () => {
                     <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                       Focus Time
                     </h2>
-                    {/* <p className="text-gray-600">Select a material to begin your session</p> */}
+                     <p className="text-gray-600">Select a material to begin your session</p> 
                   </div>
-                </div>
+                </div> */}
 
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
                   <div className="bg-purple-100 dark:bg-purple-300 rounded-xl p-6 text-center">

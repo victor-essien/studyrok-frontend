@@ -145,10 +145,22 @@ class ApiClient {
   }
 
   // HTTP methods
+
   async get<T = any>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.client.get<ApiResponse<T>>(url, config);
-    console.log('API GET response:', response);
-    return response.data.data as T;
+    try {
+      const response = await this.client.get<ApiResponse<T>>(url, config);
+
+      // Handle different response structures
+      if (response.data && 'data' in response.data) {
+        return response.data.data as T;
+      }
+
+      // If response is directly the data (like with json-server)
+      return response.data as unknown as T;
+    } catch (error) {
+      console.error('API GET Error:', error);
+      throw error;
+    }
   }
 
   async post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
