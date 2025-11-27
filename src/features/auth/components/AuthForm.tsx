@@ -59,6 +59,8 @@ export default function AuthForm() {
       return;
     }
     setName('');
+    setEmail('');
+    setConfirmPassword('');
     setPassword('');
     setPasswordError('');
     signup({ name, email, password });

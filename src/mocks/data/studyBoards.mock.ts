@@ -30,7 +30,7 @@ export const mockStudyBoards: StudyBoard[] = [
     description:
       'Complete study guide for understanding photosynthesis process, stages, and importance',
     topic: 'Photosynthesis',
-    sourceType: 'pdf',
+    sourceType: 'files',
     sourceFiles: [mockSourceFiles[0]],
     status: 'completed',
     aiModel: 'gemini-1.5-pro',
@@ -73,7 +73,7 @@ export const mockStudyBoards: StudyBoard[] = [
     title: 'Calculus Fundamentals',
     description: 'Limits, derivatives, and integrals explained with examples',
     topic: 'Calculus',
-    sourceType: 'doc',
+    sourceType: 'files',
     sourceFiles: [mockSourceFiles[1]],
     status: 'completed',
     aiModel: 'gpt-4-turbo',

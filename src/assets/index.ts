@@ -25,3 +25,5 @@ export { default as CHEVRON_DOWN } from './icons/chevron-down.svg';
 export { default as ARROW_DOWN } from './icons/arrow.down.svg';
 export { default as FILTER } from './icons/filter.svg';
 export { default as ROKIE } from './images/rokie.svg';
+export { default as ROKIE_STUDY } from './images/rokiestudy.png';
+export { default as ROKIE_AID } from './images/rokieaid.png';

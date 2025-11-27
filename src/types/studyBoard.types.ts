@@ -1,5 +1,7 @@
 export type BoardStatus = 'pending' | 'processing' | 'completed' | 'failed';
-export type SourceType = 'topic' | 'pdf' | 'doc' | 'text';
+export type SourceType = 'topic' | 'files';
+export type FileType = 'pdf' | 'doc' | 'text';
+// 'topic' | 'pdf' | 'doc' | 'text';
 
 export interface StudyBoard {
   id: string;
@@ -34,10 +36,13 @@ export interface SourceFile {
 }
 
 export interface CreateBoardPayload {
-  title?: string;
+  title: string;
   description?: string;
   topic: string;
+  subject?: string;
+  colorTheme: string;
   sourceType: SourceType;
+  fileType?: FileType;
   files?: File[];
 }
 

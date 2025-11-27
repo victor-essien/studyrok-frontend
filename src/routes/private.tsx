@@ -15,7 +15,7 @@ export const PrivateRoutes = ({ children }: ProtectedRouteProps) => {
     // trying to go to when they were redirected. This allows us to send them
     // along to that page after they login, which is a nicer user experience
     // than dropping them off on the home page.
-    return <Navigate to={'/admin-login'} state={{ from: location }} replace />;
+    return <Navigate to={'/login'} state={{ from: location }} replace />;
   }
 
   return children;

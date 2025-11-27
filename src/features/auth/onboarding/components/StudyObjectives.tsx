@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { NotebookText, ArrowLeft, BookOpenText, BookMarked, Lightbulb } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { ROKIE_AID } from '@/assets';
 
 export default function StudyObjectives({ onNext, onBack }: any) {
   const [selected, setSelected] = useState<string | null>(null);
@@ -9,36 +10,25 @@ export default function StudyObjectives({ onNext, onBack }: any) {
     {
       id: 'stay_consistent',
       label: 'Stay consistent with studying',
-      icon: <BookMarked className="w-5 h-5" />,
+      icon: <BookMarked className="w-5 h-5 text-purple-600" />,
     },
     {
       id: 'catch_up',
       label: 'Catch up on missed topics',
-      icon: <NotebookText className="w-5 h-5" />,
+      icon: <NotebookText className="w-5 h-5 text-purple-600" />,
     },
     {
       id: 'prepare_exam',
       label: 'Prepare for an upcoming exam',
-      icon: <BookOpenText className="w-5 h-5" />,
+      icon: <BookOpenText className="w-5 h-5 text-purple-600" />,
     },
     // { id: 'prepare_note', label: 'Help me prepare notes for class', icon: <NotebookPen className="w-5 h-5" /> },
     {
       id: 'build_understanding',
       label: 'Build long-term understanding',
-      icon: <Lightbulb className="w-5 h-5" />,
+      icon: <Lightbulb className="w-5 h-5 text-purple-600" />,
     },
   ];
-
-  // const handleSelected = (levelId: string) => {
-  //   // set selected level and trigger the next step if a callback was provided
-  //   const selectedObjective = studyObjectives.find((level) => level.id === levelId);
-
-  //   setSelected(levelId);
-  //   if (onDataChange && selectedObjective) {
-  //     onDataChange('studyObjective', selectedObjective.label);
-  //   }
-  //   if (onNext) onNext();
-  // };
 
   const handleSelect = (objectiveId: string) => {
     setSelected(objectiveId);
@@ -77,10 +67,24 @@ export default function StudyObjectives({ onNext, onBack }: any) {
           //    className="w-full max-w-md md:max-w-3xl mt-20"
         >
           <div className="w-full mt-32 md:mt-52 ">
-            <h2 className="text-2xl md:text-3xl mb-6  md:mb-16  text-left md:text-center font-bold text-gray-900 ">
-              Where could you use the most aid studying right now?
-            </h2>
-
+            <div className="flex flex-row items-center justify-center">
+              <motion.img
+                src={ROKIE_AID}
+                alt="ROKIE image"
+                className="w-44 h-45 mb-11"
+                animate={{
+                  y: [0, -10, 0], // moves up by 10px, then back
+                }}
+                transition={{
+                  duration: 2, // speed of one full levitation cycle
+                  repeat: Infinity, // loop forever
+                  ease: 'easeInOut', // smooth motion
+                }}
+              />
+              <h2 className="text-2xl md:text-3xl mb-6  md:mb-16  text-left md:text-center font-bold text-gray-900 ">
+                What is your goal studying right now?
+              </h2>
+            </div>
             <div
               className="  grid gap-4 
               grid-cols-1 
@@ -90,9 +94,9 @@ export default function StudyObjectives({ onNext, onBack }: any) {
                 <button
                   key={level.id}
                   onClick={() => handleSelect(level.id)}
-                  className={`flex items-center gap-3 border rounded-xl px-4 md:px-20 py-4 w-full transition-colors ${
+                  className={`flex items-center gap-3 border border-purple-500 rounded-xl px-4 md:px-20 py-4 w-full transition-colors ${
                     selected === level.id
-                      ? 'border-blue-600 bg-blue-50 text-blue-700'
+                      ? 'border-purple-600 bg-purple-50 text-purple-700'
                       : 'border-gray-200 hover:border-gray-400'
                   }`}
                 >
@@ -101,19 +105,6 @@ export default function StudyObjectives({ onNext, onBack }: any) {
                 </button>
               ))}
             </div>
-
-            {/* Continue button */}
-            {/* <button
-          onClick={onNext}
-          disabled={!selected}
-          className={`mt-8 w-full py-3 rounded-lg text-white font-medium transition ${
-            selected
-              ? "bg-blue-600 hover:bg-blue-700"
-              : "bg-gray-300 cursor-not-allowed"
-          }`}
-        >
-          Continue
-        </button> */}
           </div>
         </motion.div>
       </AnimatePresence>

@@ -4,7 +4,7 @@ import StudyObjectives from './components/StudyObjectives';
 import EducationLevel from './components/EducationLevel';
 import { useStore } from '@/store/store';
 import { useCompleteOnboarding } from '../hooks/useAuth';
-
+import CreateFirstStudyboardPage from './components/CreateFirst';
 export default function Onboarding() {
   const user = useStore((state) => state.user);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -37,7 +37,7 @@ export default function Onboarding() {
         educationLevel,
       });
 
-      setSearchParams({ currentStep: 'summary' });
+      setSearchParams({ currentStep: 'create' });
     }
   };
 
@@ -45,7 +45,7 @@ export default function Onboarding() {
   const prevStep = () => {
     if (currentStep === 'study_objectives') {
       setSearchParams({ currentStep: 'education_level' });
-    } else if (currentStep === 'summary') {
+    } else if (currentStep === 'create') {
       setSearchParams({ currentStep: 'study_objectives' });
     }
   };
@@ -63,7 +63,7 @@ export default function Onboarding() {
       {currentStep === 'study_objectives' && (
         <StudyObjectives onNext={nextStep} onBack={prevStep} />
       )}
-      {/* {currentStep === "summary" && <Summary onBack={prevStep} />} */}
+      {currentStep === 'create' && <CreateFirstStudyboardPage />}
 
       {/* <div className="text-gray-500 mt-4">
         Current Step: <strong>{currentStep}</strong>

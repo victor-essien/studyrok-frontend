@@ -18,8 +18,15 @@ import { useBoards } from '@/features/study-boards/hooks/useBoards';
 import SidebarDesk from '@/components/layout/Sidebar/SidebarDesk';
 import Header from '@/components/layout/Header/Header';
 import Sidebar from '@/components/layout/Sidebar';
+
 // src/mocks/data/dashboard.mock.ts
-import type { StudyBoard } from '@/types';
+import type { CreateBoardPayload, StudyBoard } from '@/types';
+import { CreateStudyBoardModal } from '@/features/study-boards/components/CreateStudyBoardModal';
+import { useModal, useCurrentUser } from '@/hooks/hooks';
+import {
+  useCreateBoardFromTopic,
+  useCreateBoardFromFiles,
+} from '@/features/study-boards/hooks/useBoards';
 
 const mockDashboardBoards: StudyBoard[] = [
   {
@@ -29,7 +36,7 @@ const mockDashboardBoards: StudyBoard[] = [
     description:
       'Complete study guide for understanding photosynthesis process, stages, and importance',
     topic: 'Photosynthesis',
-    sourceType: 'pdf',
+    sourceType: 'files',
     sourceFiles: [],
     status: 'completed',
     aiModel: 'gemini-1.5-pro',
@@ -70,7 +77,7 @@ const mockDashboardBoards: StudyBoard[] = [
     title: 'Calculus Fundamentals',
     description: 'Limits, derivatives, and integrals explained with examples',
     topic: 'Calculus',
-    sourceType: 'doc',
+    sourceType: 'files',
     status: 'completed',
     aiModel: 'gpt-4-turbo',
     tokensUsed: 15678,
@@ -128,14 +135,20 @@ const mockDashboardBoards: StudyBoard[] = [
 ];
 const Dashboardd: React.FC = () => {
   const navigate = useNavigate();
-  const user = useStore((state) => state.user);
+  //  const { data: boards, isLoading } = useBoards();
+  // const user = useStore((state) => state.user);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  //   const { data: boardsData, isLoading } = useBoards();
+  //  const { data: boardsData, isLoading } = useBoards();
+  const { activeModal, closeModal, openModal } = useModal();
+  const { logout, user } = useCurrentUser();
 
+  const createFromTopic = useCreateBoardFromTopic();
+  const createFromFiles = useCreateBoardFromFiles();
+  console.log('useeeeeeeeeeeeeeeee', user);
   // Use mock data directly
-  const boards = mockDashboardBoards;
-  const hasBoards = boards.length > 0;
-  const activeBoard = boards.length > 0 ? boards[0] : null;
+  const boardss = mockDashboardBoards;
+  const hasBoards = boardss.length > 0;
+  const activeBoard = boardss.length > 0 ? boardss[0] : null;
   //   const boards = boardsData?.data || [];
   //   console.log('boards',boards)
   //   const hasBoards = boards.length > 0;
@@ -154,6 +167,39 @@ const Dashboardd: React.FC = () => {
     { day: 'S', minutes: 90 },
     { day: 'S', minutes: 55 },
   ];
+  const handleCreateBoard = async (data: any) => {
+    try {
+      if (data.sourceType === 'topic') {
+        await createFromTopic.mutateAsync({
+          topic: data.topic,
+          title: data.title,
+          description: data.description,
+          subject: data.subject,
+          sourceType: 'topic',
+          colorTheme: data.colorTheme,
+        });
+      } else {
+        await createFromFiles.mutateAsync({
+          payload: {
+            topic: data.title,
+            title: data.title,
+            colorTheme: data.colorTheme,
+            description: data.description,
+            sourceType: 'files',
+            files: data.files,
+          },
+        });
+      }
+      closeModal();
+    } catch (error) {
+      console.error('Failed to create board:', error);
+    }
+  };
+
+  const handleClick = () => {
+    logout();
+    // openModal('createBoard');
+  };
 
   const stats = {
     studyTime: 405,
@@ -305,7 +351,7 @@ const Dashboardd: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="bg-gray-50 dark:bg-gray-900 rounded-2xl p-6 border border-gray-100 dark:border-gray-800"
+                className="bg-gray-100 dark:bg-gray-900 rounded-2xl p-6 border border-gray-100 dark:border-gray-800"
               >
                 <div className="flex items-center gap-3 mb-2">
                   <Clock className="w-5 h-5 text-purple-600 dark:text-purple-400" />
@@ -321,7 +367,7 @@ const Dashboardd: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.15 }}
-                className="bg-gray-50 dark:bg-gray-900 rounded-2xl p-6 border border-gray-100 dark:border-gray-800"
+                className="bg-gray-100 dark:bg-gray-900 rounded-2xl p-6 border border-gray-100 dark:border-gray-800"
               >
                 <div className="flex items-center gap-3 mb-2">
                   <Target className="w-5 h-5 text-blue-600 dark:text-blue-400" />
@@ -360,7 +406,8 @@ const Dashboardd: React.FC = () => {
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <button
-                  onClick={() => navigate('/boards/create')}
+                  // onClick={() => navigate('/boards/create')}
+                  onClick={handleClick}
                   className="p-5 bg-gradient-to-br from-purple-600 to-blue-600 text-white rounded-2xl text-left hover:shadow-lg hover:shadow-purple-500/30 transition-all group"
                 >
                   <Plus className="w-6 h-6 mb-3" />
@@ -382,7 +429,13 @@ const Dashboardd: React.FC = () => {
                 </button>
               </div>
             </motion.div>
-
+            {/* Modal */}
+            <CreateStudyBoardModal
+              isOpen={activeModal === 'createBoard'}
+              onClose={closeModal}
+              onSubmit={handleCreateBoard}
+              isLoading={createFromTopic.isPending || createFromFiles.isPending}
+            />
             {/* Weekly Chart */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -457,7 +510,7 @@ const Dashboardd: React.FC = () => {
               </div>
 
               <div className="space-y-3">
-                {boards.slice(0, 3).map((board, index) => (
+                {boardss.slice(0, 3).map((board, index) => (
                   <motion.button
                     key={board.id}
                     initial={{ opacity: 0, x: -20 }}

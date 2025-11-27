@@ -34,13 +34,6 @@ export default function LoginForm() {
     <div className="relative flex flex-col items-center  min-h-screen px-4 bg-white  transition-colors">
       {/* Back Button (fixed at top-left) */}
 
-      <button
-        onClick={() => navigate(-1)}
-        className="absolute top-9  left-4 md:left-11  text-gray-800 p-2 rounded-full hover:bg-neutral-800 hover:text-gray-100 transition"
-      >
-        <ArrowLeft className="w-5 h-5 " />
-      </button>
-
       <div className="w-full max-w-sm mt-48">
         <AnimatePresence mode="wait">
           {/*           

@@ -31,6 +31,38 @@
       "updatedAt": "2025-11-11T23:54:55.971Z",
       "studyObjective": "Stay consistent with studying",
       "educationLevel": "college"
+    },
+    {
+      "id": "user-1764251668401",
+      "email": "victoteest@gmail.com",
+      "name": "Victor test",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Victor test",
+      "tier": "free",
+      "studyGoal": 30,
+      "streak": 0,
+      "totalStudyTime": 0,
+      "aiRequestsUsed": 0,
+      "aiRequestLimit": 50,
+      "onboarded": true,
+      "createdAt": "2025-11-27T13:54:28.401Z",
+      "updatedAt": "2025-11-27T13:54:44.904Z",
+      "studyObjective": "Catch up on missed topics",
+      "educationLevel": "college"
+    },
+    {
+      "id": "user-1764260750071",
+      "email": "victortest@gmail.com",
+      "name": "Victor test",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Victor test",
+      "tier": "free",
+      "studyGoal": 30,
+      "streak": 0,
+      "totalStudyTime": 0,
+      "aiRequestsUsed": 0,
+      "aiRequestLimit": 50,
+      "onboarded": false,
+      "createdAt": "2025-11-27T16:25:50.071Z",
+      "updatedAt": "2025-11-27T16:25:50.072Z"
     }
   ],
   "boards": [

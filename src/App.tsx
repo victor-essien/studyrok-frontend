@@ -15,6 +15,7 @@ import Dashboardd from './pages/Dashboardd';
 // import { StudyBoard } from './pages/StudyBoard';
 import StudyBoards from './pages/StudyBoard';
 import MainRoutes from './routes';
+import { PublicRoute } from './routes/public';
 // import RokQuizPage from './features/quizzes/components/RokquizPage';
 
 import CreateQuizPage from './features/quizzes/components/CreateQuizPage';
@@ -73,7 +74,14 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/welcome" element={<WelcomeScreen />} />
         <Route path="/signup" element={<AuthForm />} />
-        <Route path="/login" element={<LoginForm />} />
+        <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <LoginForm />
+            </PublicRoute>
+          }
+        />
         <Route path="/onboarding" element={<Onboarding />} />
         <Route path="/space" element={<Dashboard />} />
         <Route path="/dashboard" element={<Dashboardd />} />
